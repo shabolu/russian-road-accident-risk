@@ -1,0 +1,6 @@
+weight_key,weight_label,threshold,tn,fp,fn,tp
+weight_none,Без весов,0.5,115882,3543,7281,6470
+weight_2,positive class weight = 2,0.5,112649,6776,5058,8693
+weight_4,positive class weight = 4,0.5,108000,11425,3414,10337
+weight_6,positive class weight = 6,0.5,104219,15206,2607,11144
+weight_balanced,"auto_class_weights=""Balanced""",0.5,100363,19062,1968,11783

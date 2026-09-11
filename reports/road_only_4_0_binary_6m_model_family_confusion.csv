@@ -1,0 +1,5 @@
+model_key,model_label,threshold,tn,fp,fn,tp
+xgboost,XGBoost XGBClassifier,0.5,115759,3666,7218,6533
+lightgbm,LightGBM LGBMClassifier,0.5,115787,3638,7159,6592
+hist_gradient_boosting,sklearn HistGradientBoostingClassifier,0.5,115838,3587,7170,6581
+random_forest,sklearn RandomForestClassifier,0.5,115707,3718,7146,6605

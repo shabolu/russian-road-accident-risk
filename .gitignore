@@ -1,0 +1,27 @@
+.DS_Store
+
+# Local environments and caches
+venv/
+.venv/
+__pycache__/
+*.py[cod]
+.mypy_cache/
+.pytest_cache/
+.ipynb_checkpoints/
+
+# Large local data artifacts
+data/
+dataset.json
+dataset_schema.json
+parquet_output/
+
+# Local experiment outputs
+*.log
+*.tmp
+
+# Local tool caches
+.cache/
+.claude/
+
+# Generated heavy artifacts
+reports/h3_hex_map.html

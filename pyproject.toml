@@ -1,0 +1,42 @@
+[build-system]
+requires = ["setuptools>=69", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "russian-road-accident-risk"
+version = "0.1.0"
+description = "Data preparation and baseline modeling for Russian road accident risk."
+requires-python = ">=3.11"
+dependencies = [
+    "catboost>=1.2",
+    "duckdb>=1.0",
+    "fastapi",
+    "h3>=4.0",
+    "ijson>=3.0",
+    "lightgbm>=4.6",
+    "numpy>=2.0",
+    "osmium>=4.0",
+    "pandas>=2.0",
+    "pyarrow>=15.0",
+    "scikit-learn>=1.4",
+    "uvicorn",
+    "xgboost>=3.2",
+]
+
+[project.optional-dependencies]
+notebook = [
+    "ipykernel",
+    "matplotlib",
+]
+
+[project.scripts]
+road-accidents-schema = "road_accident_risk.schema_inference:main"
+road-accidents-to-parquet = "road_accident_risk.json_to_parquet:main"
+road-accidents-slim = "road_accident_risk.slim:main"
+road-accidents-h3-panel = "road_accident_risk.h3_month_panel:main"
+road-accidents-logreg = "road_accident_risk.logreg_baseline:main"
+road-accidents-catboost = "road_accident_risk.catboost_baseline:main"
+road-accidents-osm-road-features = "road_accident_risk.osm_road_features:main"
+
+[tool.setuptools.packages.find]
+where = ["src"]

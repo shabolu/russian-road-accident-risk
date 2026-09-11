@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ru">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>H3 ДТП viewer</title>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+  <div class="app">
+    <div class="map-wrap">
+      <div class="toolbar">
+        <label>
+          Цвет:
+          <select id="metric">
+            <option value="total_accidents">ДТП всего</option>
+            <option value="road_length_total_m">Длина дорог</option>
+            <option value="junction_count">Перекрестки</option>
+            <option value="crossing_count">Переходы</option>
+            <option value="catboost_road_only_4_0_count_next_3m_score_latest">CatBoost 4.0: кол-во ДТП в след. 3м</option>
+            <option value="catboost_road_only_4_0_count_next_6m_score_latest">CatBoost 4.0: кол-во ДТП в след. 6м</option>
+            <option value="catboost_road_only_4_0_binary_next_3m_score_latest">CatBoost 4.0: ДТП в след. 3м</option>
+            <option value="catboost_road_only_4_0_binary_next_6m_weight_none_score_latest">CatBoost 4.0: ДТП в след. 6м без весов</option>
+            <option value="road_only_4_0_binary_next_6m_xgboost_score_latest">XGBoost 4.0: ДТП в след. 6м без весов</option>
+            <option value="road_only_4_0_binary_next_6m_lightgbm_score_latest">LightGBM 4.0: ДТП в след. 6м без весов</option>
+            <option value="road_only_4_0_binary_next_6m_hist_gradient_boosting_score_latest">HGB 4.0: ДТП в след. 6м без весов</option>
+            <option value="road_only_4_0_binary_next_6m_random_forest_score_latest">RandomForest 4.0: ДТП в след. 6м без весов</option>
+            <option value="catboost_road_only_4_0_binary_next_6m_weight_2_score_latest">CatBoost 4.0: ДТП в след. 6м вес 2</option>
+            <option value="catboost_road_only_4_0_binary_next_6m_weight_4_score_latest">CatBoost 4.0: ДТП в след. 6м вес 4</option>
+            <option value="catboost_road_only_4_0_binary_next_6m_weight_6_score_latest">CatBoost 4.0: ДТП в след. 6м вес 6</option>
+            <option value="catboost_road_only_4_0_binary_next_6m_weight_balanced_score_latest">CatBoost 4.0: ДТП в след. 6м Balanced</option>
+          </select>
+        </label>
+        <button id="reload">Обновить</button>
+        <button id="cancel-focus" hidden>Отмена</button>
+        <span id="status">загрузка...</span>
+      </div>
+      <div id="map"></div>
+      <div class="legend">
+        <div id="legend-title">Метрика</div>
+        <div class="swatches">
+          <span style="background:#eef2f4"></span>
+          <span style="background:#bad8dc"></span>
+          <span style="background:#70afb2"></span>
+          <span style="background:#eeb152"></span>
+          <span style="background:#dc6a44"></span>
+          <span style="background:#9a3639"></span>
+        </div>
+      </div>
+    </div>
+    <aside class="side">
+      <header>
+        <h1>H3 ДТП viewer</h1>
+        <p id="meta">Читает parquet через локальный FastAPI + DuckDB.</p>
+      </header>
+      <main id="details">
+        <p class="empty">Выберите гексагон на карте.</p>
+      </main>
+    </aside>
+  </div>
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+  <script src="/static/app.js?v=20260701-model-family-xgb-lgbm"></script>
+</body>
+</html>
