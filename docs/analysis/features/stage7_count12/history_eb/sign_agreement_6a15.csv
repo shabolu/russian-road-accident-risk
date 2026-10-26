@@ -1,0 +1,13 @@
+scale,metric,sum,count
+год,coverage_top_10pct,5.0,15
+год,coverage_top_1pct,8.0,15
+год,coverage_top_5pct,5.0,15
+год,poisson_deviance,11.0,15
+год,pr_auc,8.0,15
+год,roc_auc,10.0,15
+год,spearman,10.0,15
+месяц,pr_auc,6.0,15
+месяц,precision_top_1pct,11.0,15
+месяц,recall_top_10pct,11.0,15
+месяц,recall_top_5pct,9.0,15
+месяц,roc_auc,5.0,15

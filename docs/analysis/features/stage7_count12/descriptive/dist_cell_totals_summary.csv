@@ -1,0 +1,17 @@
+,value
+n_cells,4296.0
+cells_zero_all_years,0.5975325884543762
+cells_ge1_any_year,0.4024674115456238
+q50,0.0
+q75,2.0
+q90,12.0
+q95,22.0
+q99,49.05000000000018
+max_total,95.0
+top1pct_cells_share_accidents,0.16927230489106548
+top5pct_cells_share_accidents,0.5108306649086457
+top10pct_cells_share_accidents,0.7264393796697433
+top20pct_cells_share_accidents,0.9085829095247064
+cell_years_zero_share,0.8425808362959201
+cell_year_max,16.0
+cell_year_p99,5.0
