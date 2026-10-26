@@ -1,0 +1,3 @@
+variant,seed,roc_auc,pr_auc,precision_top_1pct,A_test_5seeds_max_abs_diff_vs_seed_runs
+road_geo_baseline,42,0.9080561179345602,0.1988808601382722,0.3072445019404916,0.0
+road_geo_v2_skdf,42,0.9082354501431956,0.1997600097797052,0.315653298835705,0.0

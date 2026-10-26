@@ -1,0 +1,7 @@
+[
+ {"variant": "road_geo_v2_skdf", "label": "A (32)", "accepted": true},
+ {"variant": "road_geo_v2_exposure_a", "label": "шаг 1: A + E3 (34)", "accepted": true},
+ {"variant": "g_E3_E1", "label": "шаг 2: + E1 (37)", "accepted": false},
+ {"variant": "g_E3_E2", "label": "шаг 2: + E2 (37)", "accepted": false},
+ {"variant": "g_E3_E4", "label": "шаг 2: + E4 (36)", "accepted": false}
+]
