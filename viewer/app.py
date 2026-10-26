@@ -141,6 +141,24 @@ CATBOOST_ROAD_ONLY_4_0_TARGET_LAYER_CONFIGS = [
         "latest_metric": "catboost_road_only_4_0_binary_next_6m_weight_balanced_score_latest",
         "latest_month": "catboost_road_only_4_0_binary_next_6m_weight_balanced_score_month",
     },
+    {
+        "key": "grade2",
+        "path": PROJECT_ROOT / "parquet_output" / "h3_month_catboost_road_only_4_0_grade2_predictions.parquet",
+        "score_column": "catboost_road_only_4_0_grade2_score",
+        "percentile_column": "catboost_road_only_4_0_grade2_score_percentile",
+        "rank_column": "catboost_road_only_4_0_grade2_rank_in_month",
+        "latest_metric": "catboost_road_only_4_0_grade2_score_latest",
+        "latest_month": "catboost_road_only_4_0_grade2_score_month",
+    },
+    {
+        "key": "grade2_delta",
+        "path": PROJECT_ROOT / "parquet_output" / "h3_month_catboost_road_only_4_0_grade2_delta_predictions.parquet",
+        "score_column": "catboost_road_only_4_0_grade2_delta_score",
+        "percentile_column": "catboost_road_only_4_0_grade2_delta_score_percentile",
+        "rank_column": "catboost_road_only_4_0_grade2_delta_rank_in_month",
+        "latest_metric": "catboost_road_only_4_0_grade2_delta_score_latest",
+        "latest_month": "catboost_road_only_4_0_grade2_delta_score_month",
+    },
 ]
 
 ROAD_FEATURE_COLUMNS = [

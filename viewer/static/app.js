@@ -31,6 +31,8 @@ const metricNames = {
   catboost_road_only_4_0_binary_next_6m_weight_4_score_latest: "CatBoost 4.0: ДТП в след. 6м вес 4",
   catboost_road_only_4_0_binary_next_6m_weight_6_score_latest: "CatBoost 4.0: ДТП в след. 6м вес 6",
   catboost_road_only_4_0_binary_next_6m_weight_balanced_score_latest: "CatBoost 4.0: ДТП в след. 6м Balanced",
+  catboost_road_only_4_0_grade2_score_latest: "CatBoost 4.0 + уклон (2 признака)",
+  catboost_road_only_4_0_grade2_delta_score_latest: "Δ logit: уклон − база 4.0",
 };
 
 const ROAD_ONLY_3_5_FEATURE_ORDER = [
@@ -240,6 +242,20 @@ const modelConfigs = {
     scoreColumn: "catboost_road_only_4_0_binary_next_6m_weight_balanced_score",
     rankColumn: "catboost_road_only_4_0_binary_next_6m_weight_balanced_rank_in_month",
     latestScoreColumn: "catboost_road_only_4_0_binary_next_6m_weight_balanced_score_latest",
+  },
+  catboost_road_only_4_0_grade2_score_latest: {
+    label: "4.0 + уклон (2)",
+    featureOrder: ROAD_ONLY_4_0_FEATURE_ORDER,
+    scoreColumn: "catboost_road_only_4_0_grade2_score",
+    rankColumn: "catboost_road_only_4_0_grade2_rank_in_month",
+    latestScoreColumn: "catboost_road_only_4_0_grade2_score_latest",
+  },
+  catboost_road_only_4_0_grade2_delta_score_latest: {
+    label: "Δ logit уклон − база",
+    featureOrder: ROAD_ONLY_4_0_FEATURE_ORDER,
+    scoreColumn: "catboost_road_only_4_0_grade2_delta_score",
+    rankColumn: "catboost_road_only_4_0_grade2_delta_rank_in_month",
+    latestScoreColumn: "catboost_road_only_4_0_grade2_delta_score_latest",
   },
 };
 
