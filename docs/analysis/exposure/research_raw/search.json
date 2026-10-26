@@ -1,0 +1,254 @@
+[
+ {
+  "label": "search:Pedestrian activity proxies and POI/transit features",
+  "agentId": "acf7b1c2808726b2b",
+  "results": [
+   {
+    "url": "https://doi.org/10.4236/jdaip.2020.81001",
+    "title": "Spatial Regression Analysis of Pedestrian Crashes Based on Point-of-Interest Data (JDAIP, 2020)",
+    "relevance": "high",
+    "snippet": "TAZ-level spatial regression of pedestrian crash frequency using 11 POI categories (bus stops, parking, hospitals, pharmacies, schools, hotels, supermarkets, banks, restaurants, parks, offices). Confirmed positive effects: bus stops, hospitals, pharmacies, restaurants, office buildings. Directly answers which POI types work as pedestrian-exposure proxies in area-level models and how to encode them (counts/densities per zone)."
+   },
+   {
+    "url": "https://www.mdpi.com/2071-1050/14/2/646",
+    "title": "Pedestrian Safety in Compact and Mixed-Use Urban Environments: Evaluation of 5D Measures on Pedestrian Crashes (Sustainability, 2022)",
+    "relevance": "high",
+    "snippet": "500 m grid-cell model of pedestrian crashes using 5D built-environment measures. Positive associations: population density, traffic volume, walking trips, footpath density, node density, bus stops, metro exits, residential/commercial/government land use. Good template for grid-level feature set and encoding (densities per cell, land-use shares)."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0001457524000381",
+    "title": "A spatiotemporal deep learning approach for pedestrian crash risk prediction based on POI trip characteristics and pedestrian exposure intensity (AAP, 2024)",
+    "relevance": "high",
+    "snippet": "Builds a pedestrian-exposure-intensity feature from POI trip characteristics (POI type/attractiveness) and uses it in a spatiotemporal crash-risk model. Shows how POI data can be converted into an exposure proxy rather than raw counts, with measured gain in prediction."
+   },
+   {
+    "url": "https://arxiv.org/pdf/2609.12173",
+    "title": "Estimating Pedestrian Volumes from GIS-Derived Built-Environment Features: A Machine Learning Framework (arXiv, 2026)",
+    "relevance": "high",
+    "snippet": "ML framework predicting pedestrian volumes from GIS/OSM-derived built-environment features (POIs, transit, land use, network) — exactly the 'pedestrian AADT from open data' problem. Useful for which features carry signal and for using predicted volume as an exposure feature in crash models."
+   },
+   {
+    "url": "https://pdfs.semanticscholar.org/3145/b858a9f6b5d54fdb75adc661ba25d720b9da.pdf",
+    "title": "Pedestrian Crash Exposure Analysis Using Alternative (Surrogate) Exposure Measures",
+    "relevance": "medium",
+    "snippet": "Proposes a segment-level surrogate pedestrian-exposure variable combining crossing-facility locations, POI distribution, road characteristics and pedestrian activity; models with the surrogate exposure fit better than those using raw pedestrian density. Supports composite proxy construction over single-count features."
+   },
+   {
+    "url": "https://dot.nebraska.gov/media/tdjdw41b/2024-modeling-pedestrian-and-bicyclist-crash-exposure-with-lbs-data.pdf",
+    "title": "Modeling Pedestrian and Bicyclist Crash Exposure with Location-Based Services Data (NDOT, 2024)",
+    "relevance": "medium",
+    "snippet": "Uses mobile LBS (and compares Strava/StreetLight-type) data to estimate pedestrian/bicycle exposure; reviews proxies used when counts are absent (transit boardings, residential/job density) and reports that adding crowdsourced activity data significantly improves macro-level crash model fit. Relevant for the Strava/mobile-data branch of exposure proxies."
+   }
+  ]
+ },
+ {
+  "label": "search:AADT estimation from OSM / open data (academic)",
+  "agentId": "a521e4e14bc6b38ac",
+  "results": [
+   {
+    "url": "https://aaltodoc.aalto.fi/items/6eaa7296-86c3-449c-9054-674529fef307",
+    "title": "Which version of betweenness centrality is the best predictor of traffic volume? (Aalto University)",
+    "relevance": "high",
+    "snippet": "Systematically compares BC variants against AADT counts on an OSM-built network: plain topological BC predicts AADT poorly; largest gains come from travel-time edge weights, a buffer zone around the study area, and a 30-min path cutoff (primal graph, travel-time-weighted shortest-path BC). Gives concrete encoding guidance for a BC-based exposure proxy."
+   },
+   {
+    "url": "https://papers.ssrn.com/sol3/papers.cfm?abstract_id=6356479",
+    "title": "Fast and Scalable Traffic Volume Estimation using Modified Betweenness Centrality (Miotti, SSRN)",
+    "relevance": "high",
+    "snippet": "Modified BC on OSM network combined with ML yields Pearson r = 0.90 and MAE ~4,100 veh/day vs. traffic counters, showing network topology alone carries most of the AADT signal; scalable to whole regions without count data."
+   },
+   {
+    "url": "https://discovery.ucl.ac.uk/id/eprint/10093070/1/1-s2.0-S096669231930568X-main(1).pdf",
+    "title": "Annual Average Daily Traffic estimation in England and Wales: an application of clustering and regression modelling (Sfyridis & Agnolucci, J. Transport Geography 2020)",
+    "relevance": "high",
+    "snippet": "Predicts AADT for all OSM road links in England & Wales using OSM road class, network centrality, land use, population/employment density and POI features; compares OLS, Random Forest and SVR (RF best) and reports which open-data features matter most — a direct template for open-data exposure proxies."
+   },
+   {
+    "url": "https://link.springer.com/article/10.1007/s40890-024-00205-1",
+    "title": "Betweenness Centrality Measures as Potential Predictors of Crash Frequency (2024)",
+    "relevance": "high",
+    "snippet": "Compares several edge-betweenness-centrality formulations as predictors of crash occurrence at zonal level — bridges AADT-proxy work and macro-level crash modelling, with results on which EBC variant correlates best with crash frequency."
+   },
+   {
+    "url": "https://trid.trb.org/View/2409437",
+    "title": "Investigating the Impact of Network Structure on Road Traffic Crashes: A Macro-level Analysis (Delhi, ward level)",
+    "relevance": "high",
+    "snippet": "Ward-level crash model from OSM street network metrics (connectivity, hierarchy, skewness, centrality) plus population density and economic covariates; finds wards with more central (higher betweenness) network structure had fewer crashes — a direct area-level use of OSM network features with reported effect direction."
+   },
+   {
+    "url": "https://pmc.ncbi.nlm.nih.gov/articles/PMC6531835/",
+    "title": "A novel approach to model traffic on road segments of large-scale urban road networks (PLoS ONE 2019)",
+    "relevance": "medium",
+    "snippet": "Models segment-level traffic using betweenness (pass-by trips) and closeness centrality (O-D trips) with population-weighted origins on an OSM graph; useful for how to encode the two centrality types as complementary exposure proxies."
+   }
+  ]
+ },
+ {
+  "label": "search:Macro-level / zonal crash models with exposure proxies",
+  "agentId": "aad5c8bfdb9f10aab",
+  "results": [
+   {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0966692316303222",
+    "title": "Macro and micro models for zonal crash prediction with application in hot zones identification (Huang, Zhou, Wang, Chang, Cai, Abdel-Aty, J. Transport Geography 2016)",
+    "relevance": "high",
+    "snippet": "Classic Huang/Abdel-Aty zonal paper: compares TAZ-level macro models vs segment/intersection micro models. Macro covariates are demographic (population per zone), infrastructure supply (road length/VMT by functional class), socioeconomic and land-use variables; discusses how zonal aggregation and encoding (densities per zone, exposure terms) affect predictive power and hot-zone ranking."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0001457517301070",
+    "title": "Intersection crash prediction modeling with macro-level data from various geographic units (Lee, Abdel-Aty, Cai, AAP 2017)",
+    "relevance": "high",
+    "snippet": "Lee/Abdel-Aty/Cai test which macro-level units (TAZ, block group, census tract, ZIP) and variables best explain intersection crashes; adds street-network features (connectedness, density, hierarchy), intersection density, road length by functional class/speed limit, population and employment. Directly relevant to choosing zonal exposure proxies and the aggregation unit."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/pii/S0001457524001064",
+    "title": "Investigating built environment and traffic flow impact on crash frequency in urban road networks (AAP 2024)",
+    "relevance": "high",
+    "snippet": "Recent macro-level study: road density, highway density, bus-route density, job-housing balance, land-use mix, VKT, employment density, congestion index all significantly associated with crash frequency; reports elasticities (e.g. employment density elasticity 0.82) which are useful as 'expected effect' benchmarks for proxy features built from OSM/population data."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0022437516302249",
+    "title": "Comparative analysis of zonal systems for macro-level crash modeling (Cai, Lee, Eluru, Abdel-Aty, J. Safety Research 2016)",
+    "relevance": "high",
+    "snippet": "Compares TAZ, block group, census tract and other zonal systems for macro crash models (Bayesian CAR negative binomial). Shows which zone-level exposure variables (VMT, road length by class, intersection density, population/employment) remain stable across units and how boundary effects bias zonal models; informs grid-cell size choice."
+   },
+   {
+    "url": "https://doi.org/10.3390/ijerph19095726",
+    "title": "Comparing and Contrasting the Impacts of Macro-Level Factors on Crash Duration and Frequency (IJERPH 2022)",
+    "relevance": "medium",
+    "snippet": "Macro-level NB/Bayesian spatial models: higher crash frequency is associated with greater population, road density, length of major/minor arterials, trip frequency and shorter intersection spacing; network density interpreted as a proxy for conflicts/congestion. Gives sign and interpretation of common zonal variables."
+   },
+   {
+    "url": "https://aaltodoc.aalto.fi/items/6eaa7296-86c3-449c-9054-674529fef307",
+    "title": "Which version of betweenness centrality is the best predictor of traffic volume? (Aalto, OSM-based)",
+    "relevance": "medium",
+    "snippet": "Tests many OSM-derived betweenness-centrality variants as AADT proxies in Greater London: plain BC predicts AADT poorly; travel-time-weighted shortest-path BC with a ~30-min cutoff on a primal network with buffer zone is the best predictor. Practical guidance for building a centrality-based traffic exposure proxy from OpenStreetMap."
+   }
+  ]
+ },
+ {
+  "label": "search:Nighttime lights / population rasters as exposure",
+  "agentId": "a4ed63edc7e39505b",
+  "results": [
+   {
+    "url": "https://doi.org/10.3390/su11174739",
+    "title": "Investigating the Potential of Using POI and Nighttime Light Data to Map Urban Road Safety at the Micro-Level: A Case in Shanghai, China (Sustainability, 2019)",
+    "relevance": "high",
+    "snippet": "Directly tests NTL as a crash-risk proxy. Random forest regression on NKDE collision density per road segment using POI + VIIRS NTL indicators, separately by road type and collision type (vehicle-pedestrian vs vehicle-vehicle). Adding NTL to POI gave only modest gains (e.g. R2 0.75->0.80 for pedestrian collisions on branch roads); POI dominates, NTL helps most for branch/minor roads and should be used carefully by road class. Good evidence that NTL adds marginal, road-class-dependent signal beyond built-environment features."
+   },
+   {
+    "url": "https://www.nature.com/articles/s41597-024-03287-z",
+    "title": "A global time series of traffic volumes on extra-urban roads (Scientific Data, 2024)",
+    "relevance": "high",
+    "snippet": "Global AADT for all extra-urban highways/primary/secondary roads (GRIP road class, population density, socio-economic indicators, travel-time/accessibility) predicted with quantile regression forests, pseudo-R2 0.74. Freely available raster/vector AADT estimates usable directly as an exposure feature for Russian cells; also documents which open covariates (road class + population density) carry AADT signal."
+   },
+   {
+    "url": "https://doi.org/10.3390/rs12010102",
+    "title": "A Novel Method of Evaluating Highway Traffic Prosperity Based on Nighttime Light Remote Sensing (Remote Sensing, 2020)",
+    "relevance": "high",
+    "snippet": "Extracts highway-only VIIRS DNB radiance (buffer along road) and correlates it with freeway traffic volume: Pearson r=0.905 for coach traffic, 0.731 for trucks. Proposes a Highway Nighttime Traffic Prosperity Index. Shows NTL sampled along the road corridor (not whole cell mean) is a usable AADT proxy for intercity highways."
+   },
+   {
+    "url": "https://www.researchgate.net/publication/355662497_Identifying_Basal_Nighttime_Radiance_Levels_for_Estimating_Traffic_Flow_based_on_VIIRSDNB_data",
+    "title": "Identifying Basal Nighttime Radiance Levels for Estimating Traffic Flow based on VIIRS/DNB data (2021)",
+    "relevance": "medium",
+    "snippet": "Caveat paper: NTL radiance changes are not all traffic; proposes using spectrally unbiased unlit control areas to estimate basal roadway radiance before using NTL as a traffic-flow proxy. Relevant to encoding: subtract background/basal radiance or use road-buffer NTL minus surrounding NTL rather than raw cell radiance."
+   },
+   {
+    "url": "https://doi.org/10.2139/ssrn.7196894",
+    "title": "Predicting Regional Hourly Traffic Flow and Speed from Open Data: ML Framework and Cross-City Transferability (SSRN, 2025)",
+    "relevance": "medium",
+    "snippet": "XGBoost on 200k OSM road segments in Brazil with covariates: DMSP-OLS nighttime lights, census population density, ESA WorldCover land cover, and road density at three buffer scales. Demonstrates the exact feature recipe (NTL + population raster + OSM road density at multiple buffers) for traffic-volume estimation and cross-city transfer, which is the exposure problem for cell-level crash models."
+   },
+   {
+    "url": "https://onlinelibrary.wiley.com/doi/epdf/10.1155/2019/5306247",
+    "title": "Macrolevel Traffic Crash Analysis: A Spatial Econometric Model Approach (Journal of Advanced Transportation, 2019)",
+    "relevance": "medium",
+    "snippet": "Zone-level spatial econometric crash model: population density and road density both significantly positive, with spatial spillover (neighbouring-zone population density raises crashes in target zone). Supports using population raster (WorldPop/GHSL) density plus neighbourhood-aggregated versions as exposure features in area-level models."
+   }
+  ]
+ },
+ {
+  "label": "search:Limitations and critiques of OSM-derived proxies",
+  "agentId": "a8f20b5861afa16fc",
+  "results": [
+   {
+    "url": "https://aaltodoc.aalto.fi/items/6eaa7296-86c3-449c-9054-674529fef307",
+    "title": "Which version of betweenness centrality is the best predictor of traffic volume? (Aalto University thesis, OSM London + 5 UK counties vs observed counts)",
+    "relevance": "high",
+    "snippet": "Direct centrality-vs-observed-flow validation on OSM networks: plain unweighted betweenness predicts AADT poorly; travel-time-weighted shortest-path BC with a ~30-min cutoff and a buffer zone around the study area gives the largest gains. Warns that boundary truncation and unweighted edges are the main sources of bias when using BC as an exposure proxy."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/abs/pii/S0925753510001268",
+    "title": "Safety performance functions with measurement errors in traffic volume (Safety Science, El-Basyouny & Sayed)",
+    "relevance": "high",
+    "snippet": "Errors-in-variables treatment of AADT in crash models: shows that bias in estimated coefficients grows with the magnitude of measurement error in the exposure variable, and proposes a Bayesian measurement-error model. Core justification for treating any proxy AADT (OSM-derived) as noisy and expecting attenuated/biased effects."
+   },
+   {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/41000462/",
+    "title": "Mapping the Completeness and Positional Accuracy of OpenStreetMap Road Data at the County Level in the Contiguous United States",
+    "relevance": "high",
+    "snippet": "Systematic completeness/positional-accuracy assessment of OSM roads: metropolitan counties are markedly better than rural ones, so OSM-derived densities, road-class shares and centralities carry a spatially structured (urban-rural) bias that can be confounded with crash risk at the cell/zone level."
+   },
+   {
+    "url": "https://pubmed.ncbi.nlm.nih.gov/33011425/",
+    "title": "Towards activity-based exposure measures in spatial analysis of pedestrian-motor vehicle crashes (AAP 2020)",
+    "relevance": "high",
+    "snippet": "Shows that using population or population density as a surrogate for pedestrian exposure in zonal pedestrian-crash models yields biased estimates and invalid inferences; argues for activity-based exposure (trips/visits), i.e. POI/bus-stop-type proxies must be validated rather than assumed."
+   },
+   {
+    "url": "https://www.sciencedirect.com/science/article/pii/S0966692326001699",
+    "title": "Estimating annual average daily traffic on local roads: Integrating spatial insights with machine learning (J. Transport Geography, 2026)",
+    "relevance": "medium",
+    "snippet": "ML AADT estimation from OSM-type features: models systematically underestimate high-volume AADT on minor/unclassified roads and overfit where samples are few and AADT is skewed — road-class tags are a weak proxy on local roads, and log-transforming the skewed target is recommended."
+   },
+   {
+    "url": "https://arxiv.org/html/2605.27889v1",
+    "title": "A Bayesian Hierarchical Generalization of Empirical Bayes for Crash Rate Estimation with Missing Traffic Volume",
+    "relevance": "medium",
+    "snippet": "Treats missing ADT as a latent variable and propagates exposure uncertainty into crash-rate estimates; critiques the standard log-offset encoding, which forces elasticity = 1 (doubling AADT doubles crashes), and recommends estimating the exposure exponent (log-AADT as a free covariate) instead."
+   }
+  ]
+ },
+ {
+  "label": "search:Gridded ML crash-risk prediction with OSM features (practitioner/benchmarks)",
+  "agentId": "a25b178b8d8b44a1f",
+  "results": [
+   {
+    "url": "https://journals.plos.org/plosone/article?id=10.1371/journal.pone.0353205",
+    "title": "Effects of 5D built environment and non-built-environment factors on injury crash risk: an interpretable ML analysis (PLOS ONE, 2026)",
+    "relevance": "high",
+    "snippet": "Closest match to the question: Changsha crash data, 1 km x 1 km grid for road-network density, OSM roads, POI mix (Shannon diversity within 1,000 m buffer), counts of schools/hospitals/malls within 1 km, distance to nearest metro/bus stop, population-density grid. CatBoost reached ROC-AUC 0.94; SHAP showed risk rises with distance to transit and falls with higher road-network density and higher POI diversity. Gives concrete encodings (buffer counts, diversity index, per-km2 density, nearest-distance)."
+   },
+   {
+    "url": "https://proceedings.neurips.cc/paper_files/paper/2023/file/a365be0950259c9624edfb4d26eabd46-Paper-Datasets_and_Benchmarks.pdf",
+    "title": "Graph Neural Networks for Road Safety Modeling: Datasets and Evaluations for Accident Analysis (Nippani et al., NeurIPS 2023 D&B)",
+    "relevance": "high",
+    "snippet": "Benchmark of 9M US crash records on OSM-derived road graphs with per-edge OSM attributes (road type, length, lanes, maxspeed, oneway) plus AADT where available. GraphSAGE and tree/MLP baselines; binary accident occurrence AUROC >87% averaged over states, <22% MAE on counts. Ablations show road graph-structural features (degree/centrality-type signals) carry much of the signal even without traffic volume; code and dataset package released (ml4roadsafety)."
+   },
+   {
+    "url": "https://carto.com/blog/predicting-traffic-accident-hotspots-with-spatial-data-science/",
+    "title": "Predicting Traffic Accident Hotspots with Spatial Data Science (CARTO practitioner case, Barcelona)",
+    "relevance": "high",
+    "snippet": "Practitioner pipeline on a 250 m grid (H3/Quadbin suggested as alternatives): OSM building footprints and intersections, traffic signals, POI by category, footfall, working population. Engineered encodings: road-type index (class weighted by length), speed-limit index, intersection density, road area coverage, distance to centre. Random Forest + regression kriging, R2 0.71; SHAP top features were traffic variability, footfall density, signals density, business density and road-type index."
+   },
+   {
+    "url": "https://www.tandfonline.com/doi/full/10.1080/19439962.2025.2529832",
+    "title": "Impact of road network patterns on traffic crash prediction: an interpretable geography machine learning approach (J. Transportation Safety & Security, 2025)",
+    "relevance": "high",
+    "snippet": "Zonal crash prediction driven by road-network pattern metrics (density, connectivity, centrality/structure indices). Proposes Geo-XGBoost with spatial weighting; reports RMSE reductions and R2 gains of 2.4% to 45% over standard XGBoost/GWR, with SHAP interpretation of how network-pattern features affect crash counts. Directly relevant to which OSM-graph features to compute per cell and how spatial weighting helps."
+   },
+   {
+    "url": "https://github.com/Robinlovelace/aadtbench",
+    "title": "AADTBench: benchmarking centrality methods for estimating street-level traffic from OSM (Lovelace et al.)",
+    "relevance": "high",
+    "snippet": "Open benchmark of AADT/flow proxies built from raw OSM networks (betweenness variants, reach, spatial-interaction, traffic assignment, statistical models) against observed counts for walking, cycling, cars and HGVs in seven cities (Oxford, Leeds, Melbourne, Zurich, Toronto, Leuven, Bristol). Leaderboard CSV shows which centrality formulations actually correlate with real volumes, which is exactly the evidence needed before using betweenness as an exposure proxy."
+   },
+   {
+    "url": "https://www.researchgate.net/publication/312032036_Estimation_of_Annual_Average_Daily_Traffic_on_Road_Segments_Network_Centrality-Based_Method_for_Metropolitan_Areas",
+    "title": "Estimation of AADT on Road Segments: Network Centrality-Based Method for Metropolitan Areas (Pun, Zhao, Liu)",
+    "relevance": "medium",
+    "snippet": "Shows plain betweenness centrality is a weak AADT predictor on real networks, but edge betweenness combined with distance-decay, population-weighted origin sampling and capacity constraints reaches Pearson r 0.90 and MAE ~4,100 veh/day vs counters. Useful recipe for a population-weighted betweenness exposure proxy from OSM + population grids rather than raw centrality."
+   }
+  ]
+ }
+]

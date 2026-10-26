@@ -1,0 +1,7 @@
+,single_feature_auc
+road_grade_abs_mean_weighted,0.59956072091985
+road_grade_abs_p90,0.6345026535787279
+steep_road_share,0.6324123878129191
+major_road_grade_abs_mean,0.5527208158890784
+junction_on_grade_count,0.8023086575527326
+grade_change_density_per_km,0.6206734685647652

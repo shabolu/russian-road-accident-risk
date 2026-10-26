@@ -1,0 +1,40 @@
+[
+ {
+  "label": "scope",
+  "agentId": "aa48100353e8c196b",
+  "question": "Какие прокси-признаки экспозиции (интенсивности движения, AADT) и пешеходной активности строят из открытых данных (OpenStreetMap: центральность графа betweenness/closeness, класс дороги, POI, остановки, здания; ночные снимки; население) для моделей аварийности ДТП на уровне ячеек/зон (macro-level crash prediction, area-level crash models, AADT estimation from OSM) — какие признаки реально работают, какой у них подтверждённый эффект, и какие кодировки (плотность на км, доли, лог) рекомендуются? Нужны конкретные статьи 2015–2026 с результатами.",
+  "angles": [
+   {
+    "label": "AADT estimation from OSM / open data (academic)",
+    "query": "AADT estimation OpenStreetMap road network betweenness centrality machine learning traffic volume prediction 2018..2026",
+    "rationale": "Core exposure proxy: papers that predict traffic volume from OSM topology/centrality and open data report feature importances and R2, directly showing which network features carry AADT signal."
+   },
+   {
+    "label": "Macro-level / zonal crash models with exposure proxies",
+    "query": "macro-level crash frequency model traffic analysis zone exposure proxy population employment road density negative binomial ScienceDirect",
+    "rationale": "The classical zonal-safety literature (Lee, Abdel-Aty, Cai, Huang) establishes which area-level variables (VMT, road length by class, intersection density, population) are significant and how they are encoded (densities, logs)."
+   },
+   {
+    "label": "Pedestrian activity proxies and POI/transit features",
+    "query": "pedestrian exposure proxy POI density bus stops land use OpenStreetMap pedestrian crash model grid cells urban",
+    "rationale": "Pedestrian activity is the second exposure dimension: this surfaces work using POIs, transit stops, building footprints and Strava/mobile data as walking-volume proxies and their measured effect on pedestrian crashes."
+   },
+   {
+    "label": "Nighttime lights / population rasters as exposure",
+    "query": "nighttime light VIIRS population density proxy road traffic crash risk spatial model grid WorldPop",
+    "rationale": "Remote-sensing proxies (VIIRS NTL, WorldPop/GHSL) are widely available for Russia and the question explicitly asks whether they add signal beyond OSM road features."
+   },
+   {
+    "label": "Gridded ML crash-risk prediction with OSM features (practitioner/benchmarks)",
+    "query": "road accident risk prediction OpenStreetMap features grid cells gradient boosting feature importance hexagon H3 accident hotspot",
+    "rationale": "Applied ML papers and repos (H3 hex grids, XGBoost/CatBoost, DL on OSM tiles) show which engineered OSM features and encodings (per-km densities, shares, log) actually improve AUC in practice."
+   },
+   {
+    "label": "Limitations and critiques of OSM-derived proxies",
+    "query": "limitations OpenStreetMap completeness bias proxy traffic volume crash model exposure measurement error centrality validation",
+    "rationale": "A skeptical angle: OSM completeness, centrality-vs-observed-flow validation studies and exposure measurement error warn which proxies are unreliable and how encoding choices bias estimates."
+   }
+  ],
+  "summary": "Split the question along its three data layers (OSM network topology for AADT, POI/transit/buildings for pedestrian activity, NTL/population rasters) and its two literature streams (statistical zonal safety models vs. applied ML on grids), then add a contrarian angle on proxy validity and OSM completeness so the review of each feature's \"common-sense adequacy\" has evidence both for and against."
+ }
+]
