@@ -25,3 +25,24 @@ parquet_output/
 
 # Generated heavy artifacts
 reports/h3_hex_map.html
+
+# Нормативные документы (выгрузки КонсультантПлюс и др.) — локально, не в репу
+docs/refs/*.pdf
+
+# ПОДД Саратова — 5+ ГБ, локально
+docs/refs/podd/
+
+# Copernicus DEM tiles (скачиваются скриптом)
+data/raw/dem/
+data/raw/viirs/
+data/raw/tiles/
+
+# Сохранённые веб-страницы, выводы сборки и служебные каталоги
+bing1.html
+od.html
+catboost_info/
+coursework/build/
+
+# Прогнозы прогонов — тяжёлые и воспроизводимые скриптами
+reports/*_preds.parquet
+docs/analysis/features/stage7_count12/models/insample_preds_test_model.parquet
