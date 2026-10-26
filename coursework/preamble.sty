@@ -1,0 +1,94 @@
+\usepackage{iftex}
+\ifXeTeX
+  % Локальная сборка через tectonic (XeTeX): в его бандле нет кириллических
+  % метрик lh, поэтому вместо fontenc/tempora берём системный Times New Roman.
+  \usepackage{fontspec}
+  \setmainfont{Times New Roman}
+  \setsansfont{Arial}
+  \setmonofont{Courier New}
+  % Шаблон печатает служебные надписи командами \CYRA...\cyrya (T2A);
+  % в TU-кодировке XeTeX их нет — объявляем сами.
+  \DeclareTextSymbol{\CYRA}{TU}{"0410}
+  \DeclareTextSymbol{\cyra}{TU}{"0430}
+  \DeclareTextSymbol{\CYRB}{TU}{"0411}
+  \DeclareTextSymbol{\cyrb}{TU}{"0431}
+  \DeclareTextSymbol{\CYRV}{TU}{"0412}
+  \DeclareTextSymbol{\cyrv}{TU}{"0432}
+  \DeclareTextSymbol{\CYRG}{TU}{"0413}
+  \DeclareTextSymbol{\cyrg}{TU}{"0433}
+  \DeclareTextSymbol{\CYRD}{TU}{"0414}
+  \DeclareTextSymbol{\cyrd}{TU}{"0434}
+  \DeclareTextSymbol{\CYRE}{TU}{"0415}
+  \DeclareTextSymbol{\cyre}{TU}{"0435}
+  \DeclareTextSymbol{\CYRZH}{TU}{"0416}
+  \DeclareTextSymbol{\cyrzh}{TU}{"0436}
+  \DeclareTextSymbol{\CYRZ}{TU}{"0417}
+  \DeclareTextSymbol{\cyrz}{TU}{"0437}
+  \DeclareTextSymbol{\CYRI}{TU}{"0418}
+  \DeclareTextSymbol{\cyri}{TU}{"0438}
+  \DeclareTextSymbol{\CYRISHRT}{TU}{"0419}
+  \DeclareTextSymbol{\cyrishrt}{TU}{"0439}
+  \DeclareTextSymbol{\CYRK}{TU}{"041A}
+  \DeclareTextSymbol{\cyrk}{TU}{"043A}
+  \DeclareTextSymbol{\CYRL}{TU}{"041B}
+  \DeclareTextSymbol{\cyrl}{TU}{"043B}
+  \DeclareTextSymbol{\CYRM}{TU}{"041C}
+  \DeclareTextSymbol{\cyrm}{TU}{"043C}
+  \DeclareTextSymbol{\CYRN}{TU}{"041D}
+  \DeclareTextSymbol{\cyrn}{TU}{"043D}
+  \DeclareTextSymbol{\CYRO}{TU}{"041E}
+  \DeclareTextSymbol{\cyro}{TU}{"043E}
+  \DeclareTextSymbol{\CYRP}{TU}{"041F}
+  \DeclareTextSymbol{\cyrp}{TU}{"043F}
+  \DeclareTextSymbol{\CYRR}{TU}{"0420}
+  \DeclareTextSymbol{\cyrr}{TU}{"0440}
+  \DeclareTextSymbol{\CYRS}{TU}{"0421}
+  \DeclareTextSymbol{\cyrs}{TU}{"0441}
+  \DeclareTextSymbol{\CYRT}{TU}{"0422}
+  \DeclareTextSymbol{\cyrt}{TU}{"0442}
+  \DeclareTextSymbol{\CYRU}{TU}{"0423}
+  \DeclareTextSymbol{\cyru}{TU}{"0443}
+  \DeclareTextSymbol{\CYRF}{TU}{"0424}
+  \DeclareTextSymbol{\cyrf}{TU}{"0444}
+  \DeclareTextSymbol{\CYRH}{TU}{"0425}
+  \DeclareTextSymbol{\cyrh}{TU}{"0445}
+  \DeclareTextSymbol{\CYRC}{TU}{"0426}
+  \DeclareTextSymbol{\cyrc}{TU}{"0446}
+  \DeclareTextSymbol{\CYRCH}{TU}{"0427}
+  \DeclareTextSymbol{\cyrch}{TU}{"0447}
+  \DeclareTextSymbol{\CYRSH}{TU}{"0428}
+  \DeclareTextSymbol{\cyrsh}{TU}{"0448}
+  \DeclareTextSymbol{\CYRSHCH}{TU}{"0429}
+  \DeclareTextSymbol{\cyrshch}{TU}{"0449}
+  \DeclareTextSymbol{\CYRHRDSN}{TU}{"042A}
+  \DeclareTextSymbol{\cyrhrdsn}{TU}{"044A}
+  \DeclareTextSymbol{\CYRERY}{TU}{"042B}
+  \DeclareTextSymbol{\cyrery}{TU}{"044B}
+  \DeclareTextSymbol{\CYRSFTSN}{TU}{"042C}
+  \DeclareTextSymbol{\cyrsftsn}{TU}{"044C}
+  \DeclareTextSymbol{\CYREREV}{TU}{"042D}
+  \DeclareTextSymbol{\cyrerev}{TU}{"044D}
+  \DeclareTextSymbol{\CYRYU}{TU}{"042E}
+  \DeclareTextSymbol{\cyryu}{TU}{"044E}
+  \DeclareTextSymbol{\CYRYA}{TU}{"042F}
+  \DeclareTextSymbol{\cyrya}{TU}{"044F}
+  \DeclareTextSymbol{\CYRYO}{TU}{"0401}
+  \DeclareTextSymbol{\cyryo}{TU}{"0451}
+\else
+  % Overleaf / pdflatex: исходный вариант шаблона.
+  \usepackage[T2A]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{tempora}
+\fi
+\usepackage[english,russian]{babel}
+\usepackage{graphicx}
+\usepackage[sort,compress]{cite}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{fancyvrb}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{minted}
+\usepackage[hidelinks]{hyperref}
+\usepackage{xurl}
