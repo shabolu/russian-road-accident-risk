@@ -1,0 +1,5 @@
+feature_a,feature_b,spearman
+lanes_mean_weighted_v2,lanes_mean_weighted,0.9999431916428158
+oneway_share_v2,oneway_share,0.9992805527281944
+bad_surface_share_among_tagged,asphalt_share_among_tagged,-0.9768444321502208
+bad_surface_share_among_tagged,bad_surface_share,0.9849180813152298

@@ -1,0 +1,4 @@
+feature_a,feature_b,spearman
+level_crossing_count,railway_crossing_density_per_km,0.8763029850725675
+curvature_deg_per_km_v2,share_length_radius_lt_200m,0.8628952385909349
+share_length_radius_lt_200m,curvature_deg_per_km_v2,0.8628952385909349

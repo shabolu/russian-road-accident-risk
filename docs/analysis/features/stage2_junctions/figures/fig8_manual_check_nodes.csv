@@ -1,0 +1,16 @@
+case,node_id,lat,lng,old_degree,degree_full,degree_street,degree_service,way_count,all_classes,names,signal_m,street_class_delta,angle_dev,osm_url
+старая 2 → Т (улица),429216955,51.637158,46.013026,2.0,3,3,0,2,secondary;tertiary,Садовая улица,,1,5.7,https://www.openstreetmap.org/node/429216955
+старая 2 → Т (улица),3666795486,51.596616,46.104307,2.0,3,3,0,2,residential,2-й Нижний Яровой проезд;Нижняя Яровая улица,,0,38.4,https://www.openstreetmap.org/node/3666795486
+старая 2 → крест (улица),1057619416,51.489586,46.087295,2.0,4,4,0,2,residential,Лесопильная улица;Хвалынская улица,,0,3.6,https://www.openstreetmap.org/node/1057619416
+старая 2 → крест (улица),1057619392,51.489778,46.08903,2.0,4,4,0,2,residential,Тамбовская улица;Хвалынская улица,,0,1.2,https://www.openstreetmap.org/node/1057619392
+"старый узел, степень 2: смена класса",731252495,51.516885,45.914903,2.0,2,2,0,2,residential;unclassified,Соликамская улица,,0,,https://www.openstreetmap.org/node/731252495
+"старый узел, степень 2: смена имени",1916791972,51.580464,46.052589,2.0,2,2,0,2,tertiary,4-й Вешний проезд;Зеленоостровская улица,,0,,https://www.openstreetmap.org/node/1916791972
+нет в старом → уличный перекрёсток,1252400720,51.428989,45.964698,,3,3,0,2,residential,8-й Увекский проезд,,0,4.2,https://www.openstreetmap.org/node/1252400720
+нет в старом → уличный перекрёсток,1111468422,51.59811,46.163016,,4,4,0,2,residential,улица Мира,,0,0.0,https://www.openstreetmap.org/node/1111468422
+крест со светофором,5128303818,51.525967,45.97984,3.0,4,4,0,3,residential;unclassified,1-я Беговая улица;Беговой проезд,22.5,1,0.0,https://www.openstreetmap.org/node/5128303818
+магистраль × улица без светофора,2124956681,51.553636,46.01877,3.0,4,4,0,3,residential;secondary,Крайняя улица;улица Танкистов,,3,2.3,https://www.openstreetmap.org/node/2124956681
+магистраль × улица без светофора,2329453102,51.50207,46.105972,3.0,4,4,0,3,residential;secondary,Бережная улица;Петровская улица,,3,2.3,https://www.openstreetmap.org/node/2329453102
+въезд service → улица,3653210622,51.586287,45.978727,2.0,3,2,1,2,residential;service,Приовражная улица,,0,,https://www.openstreetmap.org/node/3653210622
+въезд service → улица,7314095703,51.579554,46.079692,2.0,3,2,1,2,residential;service,улица Муленкова А. П.,,0,,https://www.openstreetmap.org/node/7314095703
+"уличный перекрёсток, угол > 40°",7735213604,51.497341,46.121479,2.0,3,3,0,2,residential,улица Льва Кассиля;улица Халтурина,,0,41.4,https://www.openstreetmap.org/node/7735213604
+"только service, степень ≥ 3",3638786934,51.64577,46.001425,,3,0,3,2,service,,,0,,https://www.openstreetmap.org/node/3638786934

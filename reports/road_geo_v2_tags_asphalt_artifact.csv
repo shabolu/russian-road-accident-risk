@@ -1,0 +1,32 @@
+kind,what,value
+spearman,asphalt_surface_length_m ~ major_road_length_m,0.6271727631570381
+spearman,asphalt_surface_length_m ~ street_length_m,0.5127540397995844
+spearman,asphalt_surface_length_m ~ road_length_total_m,0.4092867011053731
+spearman,asphalt_surface_length_m ~ surface_tagged_share,0.7041366410355001
+spearman,asphalt_surface_length_m ~ surface_tagged_length_m,0.844343273778866
+partial_spearman,"asphalt_surface_length_m ~ surface_tagged_share | major, street",0.5660300282381406
+partial_spearman,"asphalt_surface_length_m ~ major | surface_tagged_share, street",0.4165666006734039
+partial_spearman,"asphalt_surface_length_m ~ street | major, surface_tagged_share",0.35754253839665034
+ols_r2_rank,asphalt_surface_length_m ~ major_road_length_m,0.39334567484603766
+ols_r2_log1p,asphalt_surface_length_m ~ major_road_length_m,0.35731807318988795
+ols_r2_rank,asphalt_surface_length_m ~ major_road_length_m + street_length_m,0.49179649049373586
+ols_r2_log1p,asphalt_surface_length_m ~ major_road_length_m + street_length_m,0.449482586257668
+ols_r2_rank,asphalt_surface_length_m ~ major_road_length_m + surface_tagged_share,0.6039959746546406
+ols_r2_log1p,asphalt_surface_length_m ~ major_road_length_m + surface_tagged_share,0.5269122650042743
+ols_r2_rank,asphalt_surface_length_m ~ major_road_length_m + street_length_m + surface_tagged_share,0.6546198092795694
+ols_r2_log1p,asphalt_surface_length_m ~ major_road_length_m + street_length_m + surface_tagged_share,0.5774141328573179
+ols_r2_rank,asphalt_surface_length_m ~ road_length_total_m + surface_tagged_share,0.6257563249199681
+ols_r2_log1p,asphalt_surface_length_m ~ road_length_total_m + surface_tagged_share,0.5411286497905283
+ols_r2_rank,asphalt_surface_length_m ~ surface_tagged_length_m,0.7129155639756175
+ols_r2_log1p,asphalt_surface_length_m ~ surface_tagged_length_m,0.6841871353927181
+share_of_asphalt_length,major classes,0.36895851890885434
+share_of_asphalt_length,tertiary,0.17639446475682236
+share_of_asphalt_length,residential,0.14830352267649805
+share_of_asphalt_length,service,0.2309985561608626
+single_auc_test,asphalt_surface_length_m,0.8622870994950448
+single_auc_test,major_road_length_m,0.7631590925506426
+single_auc_test,street_length_m,0.7875136539543461
+single_auc_test,surface_tagged_share,0.6899890102827345
+single_auc_test,surface_tagged_length_m,0.8339045597953203
+single_auc_test,road_length_total_m,0.7964770632038871
+single_auc_test,"остаток rank(asphalt) | major, street, surface_tagged_share",0.7186872459537154
