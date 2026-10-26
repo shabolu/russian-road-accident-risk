@@ -11,6 +11,7 @@ from pathlib import Path
 from typing import Any
 
 import h3
+import numpy as np
 import pandas as pd
 
 from road_accident_risk.paths import (
@@ -830,6 +831,320 @@ def build_graph_node_stats(
             "connected_highway_classes": ";".join(sorted(class_set)),
         })
     return pd.DataFrame(rows)
+
+
+# --- Road+Geo v2, этап 2 (2026-10-16): перекрёстки с честной топологией ----------------------
+# Новые функции; build_graph_node_stats и scripts/build_road_graph_nodes.py не меняются
+# (от них зависят признаки бейзлайна и viewer). См. docs/analysis/features/stage2_junctions/.
+
+STREET_ROAD_CLASSES = MOTOR_ROAD_CLASSES - {"service"}
+JUNCTION_ANGLE_PROBE_M = 20.0
+
+
+def _bearing_deg(lat1: float, lng1: float, lat2: float, lng2: float) -> float:
+    """Азимут (0..360, от севера по часовой) в локальной плоской аппроксимации."""
+    dx = (lng2 - lng1) * math.cos(math.radians((lat1 + lat2) / 2))
+    dy = lat2 - lat1
+    return math.degrees(math.atan2(dx, dy)) % 360.0
+
+
+def _probe_point(
+    coords: list[tuple[float, float]], start: int, step: int, probe_m: float = JUNCTION_ANGLE_PROBE_M
+) -> tuple[float, float] | None:
+    """Точка на расстоянии probe_m от coords[start] вдоль way в направлении step (±1)."""
+    lat0, lng0 = coords[start]
+    walked = 0.0
+    i = start
+    while 0 <= i + step < len(coords):
+        a, b = coords[i], coords[i + step]
+        seg = haversine_m(a[0], a[1], b[0], b[1])
+        if seg > 0 and walked + seg >= probe_m:
+            frac = (probe_m - walked) / seg
+            return interpolate(a[0], a[1], b[0], b[1], frac)
+        walked += seg
+        i += step
+        if (b[0], b[1]) == (lat0, lng0):  # замкнутый way вернулся в узел
+            break
+    last = coords[i]
+    if (last[0], last[1]) == (lat0, lng0):
+        return None
+    return last
+
+
+def junction_angle_deviation(bearings: list[float]) -> float | None:
+    """min |θ − 90°| по углам θ между соседними (по азимуту) подходами; None при < 3 подходах."""
+    if len(bearings) < 3:
+        return None
+    b = sorted(bearings)
+    gaps = [b[i + 1] - b[i] for i in range(len(b) - 1)] + [360.0 - b[-1] + b[0]]
+    return float(min(abs(g - 90.0) for g in gaps))
+
+
+def build_junction_v2_node_stats(
+    roads: pd.DataFrame,
+    signal_points: list[tuple[float, float]],
+    h3_resolution: int = H3_RESOLUTION,
+    signal_radius_m: float = TRAFFIC_SIGNAL_RADIUS_M,
+) -> pd.DataFrame:
+    """Узлы графа с истинной степенью (число подходов) по полной и уличной сети.
+
+    roads — osm_roads_raw (колонки osm_id, highway, name, nodes_json, coords_json).
+    Подход = ребро way, выходящее из узла: интерьерная вершина way даёт 2 подхода,
+    концевая — 1 (замкнутый way в точке замыкания — 2). Повтор одной и той же вершины
+    подряд (нулевой отрезок) подходом не считается.
+    В выход попадают узлы, общие для >= 2 ways, или с >= 3 подходами.
+    """
+    from scipy.spatial import cKDTree
+
+    approaches: dict[int, list[tuple[int, str, float | None]]] = defaultdict(list)
+    node_coord: dict[int, tuple[float, float]] = {}
+    node_names: dict[int, set[str]] = defaultdict(set)
+
+    for row in roads[["osm_id", "highway", "name", "nodes_json", "coords_json"]].itertuples(index=False):
+        highway = str(row.highway)
+        if highway not in MOTOR_ROAD_CLASSES:
+            continue
+        way_id = int(row.osm_id)
+        node_ids = [int(n) for n in json.loads(row.nodes_json)]
+        coords = [(float(c[0]), float(c[1])) for c in json.loads(row.coords_json)]
+        if len(node_ids) != len(coords) or len(node_ids) < 2:
+            continue
+        name = row.name if isinstance(row.name, str) and row.name else None
+        for i, node_id in enumerate(node_ids):
+            node_coord[node_id] = coords[i]
+            if name:
+                node_names[node_id].add(name)
+            for step in (-1, 1):
+                j = i + step
+                if not 0 <= j < len(node_ids) or node_ids[j] == node_id:
+                    continue
+                probe = _probe_point(coords, i, step)
+                bearing = (
+                    _bearing_deg(coords[i][0], coords[i][1], probe[0], probe[1]) if probe is not None else None
+                )
+                approaches[node_id].append((way_id, highway, bearing))
+
+    if signal_points:
+        lat0 = float(np.mean([p[0] for p in signal_points]))
+        kx = 111_320.0 * math.cos(math.radians(lat0))
+        ky = 110_540.0
+        sig_xy = np.array([[p[1] * kx, p[0] * ky] for p in signal_points])
+        tree = cKDTree(sig_xy)
+    else:
+        tree = None
+
+    rows = []
+    for node_id, apps in approaches.items():
+        way_ids = {a[0] for a in apps}
+        degree = len(apps)
+        if len(way_ids) < 2 and degree < 3:
+            continue
+        lat, lng = node_coord[node_id]
+        street = [a for a in apps if a[1] in STREET_ROAD_CLASSES]
+        service = [a for a in apps if a[1] == "service"]
+        street_classes = {a[1] for a in street}
+        all_classes = {a[1] for a in apps}
+        street_degree = len(street)
+
+        nearest_signal_m = None
+        if tree is not None:
+            idx = tree.query_ball_point([lng * kx, lat * ky], r=signal_radius_m + 5.0)
+            dists = [haversine_m(lat, lng, signal_points[k][0], signal_points[k][1]) for k in idx]
+            dists = [d for d in dists if d <= signal_radius_m]
+            nearest_signal_m = min(dists) if dists else None
+        has_signal = nearest_signal_m is not None
+
+        is_street_junction = street_degree >= 3
+        street_major = bool(street_classes & MAJOR_ROAD_CLASSES)
+        street_minor = bool(street_classes - MAJOR_ROAD_CLASSES)
+        street_bearings = [a[2] for a in street if a[2] is not None]
+        angle_dev = junction_angle_deviation(street_bearings) if is_street_junction else None
+
+        rows.append({
+            "node_id": node_id,
+            "h3": latlng_to_h3_cell(lat, lng, h3_resolution),
+            "lat": lat,
+            "lng": lng,
+            "way_count": len(way_ids),
+            "street_way_count": len({a[0] for a in street}),
+            "degree_full": degree,
+            "degree_street": street_degree,
+            "degree_service": len(service),
+            "is_street_junction": is_street_junction,
+            "is_street_3leg": street_degree == 3,
+            "is_street_4leg": street_degree >= 4,
+            "has_traffic_signal_nearby": has_signal,
+            "nearest_traffic_signal_m": nearest_signal_m,
+            "is_street_4leg_unsignalized": street_degree >= 4 and not has_signal,
+            "is_major_x_street_unsignalized": is_street_junction and street_major and street_minor and not has_signal,
+            "is_signalized_junction": is_street_junction and has_signal,
+            # въезд: service примыкает к уличной сети, которая проходит через узел
+            "is_driveway": street_degree >= 2 and len(service) >= 1,
+            "street_class_delta": road_class_delta(sorted(street_classes)) if is_street_junction else 0,
+            "junction_angle_dev": angle_dev,
+            "street_classes": ";".join(sorted(street_classes)),
+            "all_classes": ";".join(sorted(all_classes)),
+            "names": ";".join(sorted(node_names[node_id])),
+        })
+    return pd.DataFrame(rows).sort_values(["h3", "node_id"]).reset_index(drop=True)
+
+
+JUNCTION_V2_FEATURES = [
+    "street_junction_3leg_count",
+    "street_junction_4leg_count",
+    "street_junction_4leg_unsignalized_count",
+    "major_x_street_unsignalized_count",
+    "signalized_junction_count",
+    "driveway_count",
+    "street_class_delta_max",
+    "junction_angle_dev_mean",
+]
+
+
+def aggregate_h3_junction_v2_features(nodes: pd.DataFrame, cells: pd.Series | None = None) -> pd.DataFrame:
+    """Счёт узлов нового типа на ячейку H3. Отсутствие узлов -> 0, кроме угла (NaN: нет перекрёстков)."""
+    sj = nodes[nodes["is_street_junction"]]
+    agg = nodes.groupby("h3").agg(
+        street_junction_3leg_count=("is_street_3leg", "sum"),
+        street_junction_4leg_count=("is_street_4leg", "sum"),
+        street_junction_4leg_unsignalized_count=("is_street_4leg_unsignalized", "sum"),
+        major_x_street_unsignalized_count=("is_major_x_street_unsignalized", "sum"),
+        signalized_junction_count=("is_signalized_junction", "sum"),
+        driveway_count=("is_driveway", "sum"),
+    )
+    agg = agg.join(sj.groupby("h3").agg(
+        street_class_delta_max=("street_class_delta", "max"),
+        junction_angle_dev_mean=("junction_angle_dev", "mean"),
+    ), how="left")
+    if cells is not None:
+        agg = agg.reindex(pd.Index(sorted(set(cells) | set(agg.index)), name="h3"))
+    counts = [c for c in JUNCTION_V2_FEATURES if c != "junction_angle_dev_mean"]
+    agg[counts] = agg[counts].fillna(0)
+    return agg.reset_index()
+
+
+# ---------------------------------------------------------------------------
+# Road+Geo v2, этап 3 (2026-10-16): теги OSM — «нет тега» = неизвестно (NaN), а не 0.
+# Старые row_base_for_way / aggregate_h3_road_features не меняются; новые функции рядом.
+# Итог: docs/analysis/features/stage3_tags/README.md.
+TAGS_V2_MIN_TAGGED_M = 100.0  # меньше размеченной длины в ячейке -> доля/среднее = NaN
+ONEWAY_V2_YES = {"yes", "true", "1", "-1", "reverse"}
+ONEWAY_V2_NO = {"no", "false", "0"}
+ONEWAY_V2_IMPLIED_JUNCTIONS = {"roundabout", "circular"}
+
+# Признаки ячейки этапа 3 (новые имена; в старые наборы не входят).
+TAGS_V2_MODEL_FEATURES = [
+    "street_length_m",
+    "asphalt_share_among_tagged",
+    "bad_surface_share_among_tagged",
+    "lanes_mean_weighted_v2",
+    "oneway_share_v2",
+]
+# Только диагностика: в модели не используются.
+TAGS_V2_DIAGNOSTIC_FEATURES = ["surface_tagged_share", "lanes_tagged_length_m", "surface_tagged_length_m"]
+TAGS_V2_FEATURES = [*TAGS_V2_MODEL_FEATURES, *TAGS_V2_DIAGNOSTIC_FEATURES]
+
+
+def parse_oneway_v2(tags: dict[str, Any]) -> bool:
+    """Одностороннее движение с учётом oneway=-1 и неявной односторонности кольца.
+
+    oneway ∈ {yes, true, 1, -1, reverse} -> True; oneway ∈ {no, false, 0} -> False;
+    без тега: junction ∈ {roundabout, circular} -> True (в OSM кольцо одностороннее по умолчанию),
+    иначе False (по умолчанию в OSM дорога двусторонняя — это не «неизвестно»).
+    """
+    value = tags.get("oneway")
+    if value is not None:
+        v = str(value).strip().lower()
+        if v in ONEWAY_V2_YES:
+            return True
+        if v in ONEWAY_V2_NO:
+            return False
+    return str(tags.get("junction", "")).strip().lower() in ONEWAY_V2_IMPLIED_JUNCTIONS
+
+
+def road_tags_v2_for_way(tags: dict[str, Any]) -> dict[str, Any]:
+    """Теги way в семантике этапа 3: отсутствие surface/lanes -> NaN (неизвестно).
+
+    Определения асфальта и плохого покрытия — те же множества, что в старом коде
+    (ASPHALT_SURFACES, BAD_SURFACES); прочие значения (compacted, paving_stones, fine_gravel)
+    входят в размеченную длину, но ни в асфальт, ни в плохое покрытие.
+    """
+    surface = tags.get("surface")
+    surface = str(surface).strip().lower() if surface is not None and str(surface).strip() else None
+    lanes = parse_number(tags.get("lanes"))
+    return {
+        "surface_v2": surface,
+        "surface_tagged": surface is not None,
+        "is_asphalt_v2": (surface in ASPHALT_SURFACES) if surface is not None else np.nan,
+        "is_bad_surface_v2": (surface in BAD_SURFACES) if surface is not None else np.nan,
+        "lanes_v2": lanes if lanes is not None else np.nan,
+        "oneway_v2": parse_oneway_v2(tags),
+    }
+
+
+def build_h3_tag_v2_segments(h3_segments: pd.DataFrame, roads: pd.DataFrame) -> pd.DataFrame:
+    """Куски way × ячейка (osm_road_h3_segments) + теги v2 из tags_json (osm_roads_raw) по osm_id."""
+    tag_rows = []
+    for osm_id, tags_json in zip(roads["osm_id"], roads["tags_json"]):
+        tags = json.loads(tags_json) if isinstance(tags_json, str) else {}
+        tag_rows.append({"osm_id": int(osm_id), **road_tags_v2_for_way(tags)})
+    tags_df = pd.DataFrame(tag_rows).drop_duplicates("osm_id")
+    seg = h3_segments[["h3", "osm_id", "highway", "segment_length_m", "is_major"]].copy()
+    seg["osm_id"] = seg["osm_id"].astype("int64")
+    out = seg.merge(tags_df, on="osm_id", how="left", validate="many_to_one")
+    if out["surface_tagged"].isna().any():
+        raise ValueError("build_h3_tag_v2_segments: есть куски без way в osm_roads_raw")
+    return out
+
+
+def aggregate_h3_tags_v2_features(
+    seg: pd.DataFrame,
+    cells: pd.Series | None = None,
+    min_tagged_m: float = TAGS_V2_MIN_TAGGED_M,
+) -> pd.DataFrame:
+    """Признаки ячейки этапа 3 из build_h3_tag_v2_segments.
+
+    street_length_m              — длина уличной сети (STREET_ROAD_CLASSES = motor-классы без service);
+    major_road_length_m          — длина MAJOR_ROAD_CLASSES (то же определение, что в панели; для сверки);
+    asphalt_share_among_tagged   — L(asphalt) / L(surface размечен); NaN, если L(размечено) < min_tagged_m;
+    bad_surface_share_among_tagged — L(плохое) / L(размечено); NaN при том же условии;
+    surface_tagged_share         — L(размечено) / L(всё) — диагностика полноты, в модель не идёт;
+    lanes_mean_weighted_v2       — Σ lanes·L / Σ L по кускам с тегом lanes; NaN, если L(lanes) < min_tagged_m;
+    lanes_tagged_share           — L(lanes размечен) / L(всё) — диагностика (= старый признак);
+    oneway_share_v2              — L(одностороннее, parse_oneway_v2) / L(всё); тега нет -> двустороннее.
+    """
+    s = seg.copy()
+    L = s["segment_length_m"]
+    s["_street"] = np.where(s["highway"].isin(STREET_ROAD_CLASSES), L, 0.0)
+    s["_major"] = np.where(s["is_major"].astype(bool), L, 0.0)
+    s["_surf"] = np.where(s["surface_tagged"].astype(bool), L, 0.0)
+    s["_asph"] = np.where(s["is_asphalt_v2"] == True, L, 0.0)  # noqa: E712 — NaN -> не считается
+    s["_bad"] = np.where(s["is_bad_surface_v2"] == True, L, 0.0)  # noqa: E712
+    has_lanes = s["lanes_v2"].notna()
+    s["_lanes_L"] = np.where(has_lanes, L, 0.0)
+    s["_lanes_x_L"] = np.where(has_lanes, s["lanes_v2"].fillna(0) * L, 0.0)
+    s["_oneway"] = np.where(s["oneway_v2"].astype(bool), L, 0.0)
+    g = s.groupby("h3").agg(
+        road_length_total_m=("segment_length_m", "sum"), street_length_m=("_street", "sum"),
+        major_road_length_m=("_major", "sum"), surface_tagged_length_m=("_surf", "sum"),
+        asphalt_tagged_length_m=("_asph", "sum"), bad_surface_tagged_length_m=("_bad", "sum"),
+        lanes_tagged_length_m=("_lanes_L", "sum"), lanes_x_length=("_lanes_x_L", "sum"),
+        oneway_length_v2_m=("_oneway", "sum"),
+    )
+    surf_ok = g["surface_tagged_length_m"] >= min_tagged_m
+    lanes_ok = (g["lanes_tagged_length_m"] >= min_tagged_m) & (g["lanes_tagged_length_m"] > 0)
+    g["asphalt_share_among_tagged"] = (g["asphalt_tagged_length_m"] / g["surface_tagged_length_m"]).where(surf_ok)
+    g["bad_surface_share_among_tagged"] = (g["bad_surface_tagged_length_m"] / g["surface_tagged_length_m"]).where(surf_ok)
+    g["surface_tagged_share"] = g["surface_tagged_length_m"] / g["road_length_total_m"]
+    g["lanes_mean_weighted_v2"] = (g["lanes_x_length"] / g["lanes_tagged_length_m"]).where(lanes_ok)
+    g["lanes_tagged_share"] = g["lanes_tagged_length_m"] / g["road_length_total_m"]
+    g["oneway_share_v2"] = g["oneway_length_v2_m"] / g["road_length_total_m"]
+    if cells is not None:
+        extra = sorted(set(g.index) - set(cells))
+        if extra:
+            raise ValueError(f"aggregate_h3_tags_v2_features: {len(extra)} ячеек вне cells")
+        g = g.reindex(pd.Index(sorted(set(cells)), name="h3"))
+    return g.drop(columns=["lanes_x_length"]).reset_index()
 
 
 def build_point_feature_stats(

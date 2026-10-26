@@ -9,8 +9,20 @@ from catboost import CatBoostClassifier, Pool
 from sklearn.metrics import average_precision_score, classification_report, confusion_matrix, roc_auc_score
 
 from road_accident_risk.logreg_baseline import TARGET, TRAIN_END, precision_recall_at_k
-from road_accident_risk.osm_road_features import MOTOR_ROAD_CLASSES
-from road_accident_risk.paths import H3_MONTH_ROAD_FEATURES_PARQUET, PROJECT_ROOT
+from road_accident_risk.exposure_v6 import EXPOSURE_V6_FEATURES
+from road_accident_risk.osm_road_features import JUNCTION_V2_FEATURES, MOTOR_ROAD_CLASSES, TAGS_V2_FEATURES
+from road_accident_risk.paths import (
+    H3_EXPOSURE_V6_FEATURES_PARQUET,
+    H3_GEOMETRY_V2_FEATURES_PARQUET,
+    H3_JUNCTION_V2_FEATURES_PARQUET,
+    H3_MONTH_ROAD_FEATURES_PARQUET,
+    H3_ROAD_GRADE_FEATURES_PARQUET,
+    H3_SKDF_V2_FEATURES_PARQUET,
+    H3_TAGS_V2_FEATURES_PARQUET,
+    PROJECT_ROOT,
+)
+from road_accident_risk.skdf_v2 import SKDF_V2_ALL_FEATURES, SKDF_V2_FEATURES
+from road_accident_risk.street_graph_v2 import GEOMETRY_V2_FEATURES
 
 
 FEATURE_SET_ROAD_WITHOUT_TYPE_LENGTHS = "road_without_type_lengths"
@@ -19,9 +31,194 @@ FEATURE_SET_ROAD_WITHOUT_TYPE_LENGTHS_NO_CALENDAR_SLIM = "road_without_type_leng
 FEATURE_SET_ROAD_WITHOUT_TYPE_LENGTHS_NO_CALENDAR_SLIM_DEDUP = (
     "road_without_type_lengths_no_calendar_slim_dedup"
 )
+# Бейзлайн с 2026-09-16: road-only 4.0 (59 признаков) + два признака продольного уклона
+# из Copernicus DEM (см. EXPERIMENTS.md, «Road+Geo Baseline»). Признаки уклона живут в
+# отдельном parquet (H3_ROAD_GRADE_FEATURES_PARQUET) и подтягиваются по h3.
+FEATURE_SET_ROAD_GEO_BASELINE = "road_geo_baseline"
+ROAD_GEO_FEATURES = ["road_grade_abs_mean_weighted", "grade_change_density_per_km"]
+
 FEATURE_SET_ROAD_WITHOUT_TYPE_LENGTHS_NO_CALENDAR_SLIM_DEDUP_LOG1P = (
     "road_without_type_lengths_no_calendar_slim_dedup_log1p"
 )
+
+# Road+Geo v2, этап 1 (2026-10-15): чистка бейзлайна 61 -> 33 без пересчёта признаков.
+# Основание: docs/analysis/features/REVIEW_2026-10-15.md, PLAN.md (этап 1),
+# фактические Spearman-пары: reports/road_geo_baseline_spearman_pairs.csv,
+# итог: docs/analysis/features/stage1_prune/README.md. Бейзлайн road_geo_baseline не меняется.
+FEATURE_SET_ROAD_GEO_V2_PRUNE = "road_geo_v2_prune"
+
+# Группа -> {признак: причина удаления}. Группы использованы в абляции по шагам.
+V2_PRUNE_EXCLUDED_GROUPS: dict[str, dict[str, str]] = {
+    "osm_tag_completeness": {
+        "lanes_tagged_share": "полнота тега lanes (прилежание картографа); rho 0.956 с lanes_mean_weighted",
+        "maxspeed_tagged_share": "полнота тега maxspeed (прилежание картографа); 78 % нулей",
+    },
+    "length": {
+        "road_way_count": "дубликат road_length_total_m, rho 0.933 (остаток - нарезка ways)",
+        "lane_meters_estimate": "дубликат road_length_total_m, rho 0.966 (lanes=1 при пропуске)",
+    },
+    "speed": {
+        "maxspeed_max": "4 уникальных значения, импутация по классу дороги",
+        "maxspeed_mean_weighted": "перекодировка долей классов, rho -0.978 с road_share_service",
+    },
+    "junctions": {
+        "legacy_major_minor_junction_count": "дубликат major_junction_count, rho 0.980",
+        "class_delta_junction_density_per_km": "дубликат minor_to_major_junction_density_per_km, rho 0.997",
+        "minor_to_major_junction_density_per_km": "density-форма; rho 0.941 с minor_to_major_junction_count",
+        "junction_density_per_km": "density-форма junction_count, rho 0.930",
+        "junction_degree_max": "дубликат junction_degree_mean, rho 0.943",
+        "class_delta_mean": "дубликат class_delta_max, rho 0.934",
+        "signalized_class_delta_junction_count": "95 % нулей; rho 0.922 с traffic_signal_count",
+        # отклонение от PLAN.md: в плане оставался, но по факту дубликат
+        "minor_to_major_junction_count": "дубликат unsignalized_high_delta_junction_count, rho 0.978 "
+                                          "(и junction_count, rho 0.908)",
+    },
+    "curvature": {
+        "turn_event_density_per_km": "плотность вершин OSM; rho 0.931 с road_segment_density_per_km",
+        "sharp_turn_count": "rho 0.896 с sharp_turn_share, 0.929 с sharp_turn_density_per_km",
+        "sharp_turn_density_per_km": "дубликат sharp_turn_share, rho 0.968",
+    },
+    "segmentation": {
+        "road_segment_count": "число вершин; rho 0.906 с длиной, 0.926 с road_way_count",
+        "road_segment_length_mean": "дубликат road_segment_length_median, rho 0.891",
+        "road_segment_density_per_km": "плотность оцифровки; rho 0.892 с short_segment_share",
+    },
+    "dead_ends": {
+        # отклонение от PLAN.md: план оставлял density; оставлен count (см. README этапа)
+        "dead_end_density_per_km": "density-форма dead_end_count (rho 0.846); делитель с service, max 631/км",
+    },
+    "surface": {
+        "asphalt_surface_share": "пара length/share с asphalt_surface_length_m, rho 0.918",
+    },
+    "dead_weight": {
+        "motorway_junction_density_per_km": "99.4 % нулей, важность 0.05",
+        "road_share_living_street": "99.3 % нулей, важность 0.06",
+        "priority_sign_density_per_km": "98.6 % нулей, важность 0.04",
+        "traffic_calming_density_per_km": "98.3 % нулей, важность 0.19",
+        "bridge_length_m": "98.1 % нулей, важность 0.14",
+    },
+    "composition": {
+        "major_road_share": "линейная комбинация road_share_{trunk,primary,secondary} (+ исключённые links)",
+    },
+}
+V2_PRUNE_EXCLUDED_FEATURES = {
+    feature for group in V2_PRUNE_EXCLUDED_GROUPS.values() for feature in group
+}
+
+# Road+Geo v2, этап 2 (2026-10-16): перекрёстки с честной топологией.
+# Новые признаки ячейки лежат в H3_JUNCTION_V2_FEATURES_PARQUET (scripts/build_junction_v2_features.py),
+# подтягиваются по h3 (attach_junction_v2_features). Итог: docs/analysis/features/stage2_junctions/README.md.
+# road_geo_baseline и road_geo_v2_prune не меняются.
+FEATURE_SET_ROAD_GEO_V2_JUNCTIONS = "road_geo_v2_junctions"
+
+# Старые признаки перекрёстков, оставшиеся в road_geo_v2_prune, -> причина замены.
+V2_JUNCTIONS_REPLACED_FEATURES: dict[str, str] = {
+    "junction_count": "66 % узлов с service, 828 узлов степени 2; -> street_junction_*_count + driveway_count",
+    "junction_degree_mean": "степень = число ways в узле, а не подходов",
+    "three_way_junction_count": "12 751 Т-образных учтены как степень 2; -> street_junction_3leg_count",
+    "four_plus_way_junction_count": "1 204 крестообразных учтены как степень 2; -> street_junction_4leg_count",
+    "major_junction_count": "любой узел с major-классом, включая въезды service; -> major_x_street_unsignalized_count",
+    "class_delta_max": "ранги с service (delta 6 = primary x service); -> street_class_delta_max",
+    "unsignalized_high_delta_junction_count": "rho 0.953 с driveway_count; -> driveway_count",
+    "traffic_signal_count": "счёт узлов-светофоров зависит от стиля разметки; -> signalized_junction_count",
+}
+# Правило «одна величина — один признак» (|rho| >= 0.85) внутри новых признаков.
+V2_JUNCTIONS_DEDUP_EXCLUDED: dict[str, str] = {
+    "street_junction_4leg_unsignalized_count": "rho 0.949 с street_junction_4leg_count (светофор у 6 % "
+                                               "крестов); одиночный AUC ниже (0.629 против 0.696)",
+}
+V2_JUNCTIONS_NEW_FEATURES = [f for f in JUNCTION_V2_FEATURES if f not in V2_JUNCTIONS_DEDUP_EXCLUDED]
+
+# Road+Geo v2, этап 3 (2026-10-16): теги OSM — «нет тега» = неизвестно (NaN), а не 0.
+# Новые признаки ячейки лежат в H3_TAGS_V2_FEATURES_PARQUET (scripts/build_tags_v2_features.py),
+# подтягиваются по h3 (attach_tags_v2_features). Итог: docs/analysis/features/stage3_tags/README.md.
+# road_geo_baseline, road_geo_v2_prune и road_geo_v2_junctions не меняются.
+FEATURE_SET_ROAD_GEO_V2_TAGS = "road_geo_v2_tags"
+
+# B1: экспозиция вместо асфальта. Старый признак -> признаки-замены.
+V2_TAGS_EXPOSURE_REPLACED: dict[str, list[str]] = {
+    "asphalt_surface_length_m": ["major_road_length_m", "street_length_m"],
+}
+V2_TAGS_EXPOSURE_REASON = (
+    "нет тега surface = «не асфальт»; surface размечен у 100 % длины trunk/primary/secondary и 14–30 % "
+    "residential/service -> длина магистралей + полнота разметки (см. stage3_tags/README.md)"
+)
+# B2: семантика пропусков. Старый признак -> v2-версия (NaN при отсутствии тега / < 100 м размеченной длины).
+V2_TAGS_SEMANTICS_REPLACED: dict[str, str] = {
+    "bad_surface_share": "bad_surface_share_among_tagged",
+    "lanes_mean_weighted": "lanes_mean_weighted_v2",
+    "oneway_share": "oneway_share_v2",
+}
+
+# Road+Geo v2, этап 4 (2026-10-16): геометрия улиц без service — граф «перекрёсток -> перекрёсток».
+# Новые признаки ячейки лежат в H3_GEOMETRY_V2_FEATURES_PARQUET (scripts/build_geometry_v2_features.py),
+# подтягиваются по h3 (attach_geometry_v2_features). Итог: docs/analysis/features/stage4_geometry/README.md.
+# road_geo_baseline, road_geo_v2_prune, road_geo_v2_junctions и road_geo_v2_tags не меняются.
+FEATURE_SET_ROAD_GEO_V2_GEOMETRY = "road_geo_v2_geometry"
+
+# Старый признак -> признаки-замены (на месте старого; пустой список — удалить без замены).
+# B1: сегментация (шаг вершин OSM) -> длина квартала.
+V2_GEOMETRY_BLOCKS_REPLACED: dict[str, list[str]] = {
+    "road_segment_length_median": ["block_length_median_m"],
+    "short_segment_share": [],
+}
+# B2: углы в вершинах OSM (все классы, вкл. service и углы на перекрёстках) -> кривизна и радиус после DP.
+V2_GEOMETRY_CURVATURE_REPLACED: dict[str, list[str]] = {
+    "road_curvature_mean_weighted": [],
+    "road_curvature_max": ["min_curve_radius_m"],
+    "curvature_deg_per_km": ["curvature_deg_per_km_v2"],
+    "sharp_turn_share": [],
+}
+# B3: тупики, ориентация, переезды.
+V2_GEOMETRY_OTHER_REPLACED: dict[str, list[str]] = {
+    "dead_end_count": ["street_dead_end_count"],
+    "road_orientation_entropy": ["road_orientation_entropy_v2"],
+    "railway_crossing_density_per_km": ["level_crossing_count"],
+}
+V2_GEOMETRY_REPLACED_REASON: dict[str, str] = {
+    "road_segment_length_median": "медианный шаг вершин OSM (плотность оцифровки), 58 % сегментов — service",
+    "short_segment_share": "доля шагов вершин < 50 м; порог выше медианы шага",
+    "road_curvature_mean_weighted": "угол на вершину зависит от частоты вершин; service и углы на перекрёстках",
+    "road_curvature_max": "p50 = 49°: прямой угол парковочного проезда",
+    "curvature_deg_per_km": "числитель и знаменатель с service, углы на перекрёстках",
+    "sharp_turn_share": "порог 45° произволен, ловит прямые углы парковок",
+    "dead_end_count": "85 % — концы service-проездов",
+    "road_orientation_entropy": "с service (парковочные ряды под любыми углами)",
+    "railway_crossing_density_per_km": "смешаны автопереезды и пешеходные переходы через пути; делитель с service",
+}
+
+
+# Road+Geo v2, этап 5 (2026-10-16): паспортные атрибуты ФГИС СКДФ.
+# Признаки ячейки лежат в H3_SKDF_V2_FEATURES_PARQUET (scripts/build_skdf_v2_features.py),
+# подтягиваются по h3 (attach_skdf_v2_features). Итог: docs/analysis/features/stage5_skdf/README.md.
+# road_geo_baseline и все v2-наборы этапов 1–4 не меняются.
+FEATURE_SET_ROAD_GEO_V2_SKDF = "road_geo_v2_skdf"
+# Блоки абляции 5.9 (после дедупликации по Spearman, README этапа 5).
+V2_SKDF_WIDTH = ["skdf_roadway_width_mean_w", "skdf_width_per_lane_mean_w"]            # B1
+V2_SKDF_COATING_REPLACED = {"bad_surface_share_among_tagged": "skdf_low_coating_share"}  # B2
+V2_SKDF_HIERARCHY = ["skdf_cat_sp_rank_mean_w"]                                         # B3
+V2_SKDF_LANES_REPLACED = {"lanes_mean_weighted_v2": "lanes_skdf_or_osm"}                # B4a
+V2_SKDF_LANES_BOTH = ["skdf_lanes_mean_w"]                                              # B4b
+V2_SKDF_SPEED = ["skdf_speed_mean_w"]                                                   # B5
+V2_SKDF_AXLE = ["skdf_axle_load_mean_w"]                                                # B5 (нагрузка)
+V2_SKDF_TRAFFIC = ["skdf_real_traffic_max"]                                             # B6
+# Итоговая комбинация блоков (аргументы build_road_geo_v2_skdf_features), решение — stage5_skdf/README.md:
+# только B1 (ширина): комбинации с иерархией/скоростью/нагрузкой/traffic прироста сверх B1 не дают,
+# а «ширина + иерархия + скорость + нагрузка» роняет precision@1 % сверх 2σ.
+ROAD_GEO_V2_SKDF_FINAL: dict = dict(width=True)
+# Все блоки, прошедшие правило 5.9 поодиночке (вариант skdf_C_all_passed, 36 признаков).
+ROAD_GEO_V2_SKDF_ALL_PASSED: dict = dict(width=True, hierarchy=True, speed=True, axle=True, traffic=True)
+
+# Road+Geo v2, этап 6.2–6.5 (запуск 6a, 2026-10-19): прокси экспозиции из OSM — положение, POI, застройка, ОТ.
+# Признаки ячейки лежат в H3_EXPOSURE_V6_FEATURES_PARQUET (scripts/build_exposure_v6_features.py),
+# подтягиваются по h3 (attach_exposure_v6_features). Отбор — по двум валидационным фолдам 2021 + 2022
+# (src/road_accident_risk/v2_eval.py), итог: docs/analysis/features/stage6_exposure/blocks_a/README.md.
+# Промежуточный набор этапа 6 (до центральности 6.6 и соседей 6.7): A = road_geo_v2_skdf + блоки,
+# прошедшие правило и жадную сборку. Прошёл только E3 (застройка); E1 (положение), E2 (POI) — не прошли
+# ограничитель recall@10 %, E4 (ОТ) — без значимого эффекта; маршруты ОТ ухудшают PR-AUC.
+FEATURE_SET_ROAD_GEO_V2_EXPOSURE_A = "road_geo_v2_exposure_a"
+V2_EXPOSURE_A_FEATURES = ["building_footprint_m2", "small_building_share"]  # E3
+
 
 SLIM_EXCLUDED_FEATURES = {
     "road_share_motorway",
@@ -82,6 +279,16 @@ DUPLICATE_EXCLUDED_FEATURES = {
     "class_delta_junction_count",
     "turn_event_count",
     "short_segment_count",
+}
+
+# Признаки с некорректной семантикой, а не дубликаты.
+# parse_bool_yes трактует ОТСУТСТВУЮЩИЙ тег lit как False, но в OSM отсутствие
+# lit означает "неизвестно", а не "не освещено" (в отличие от oneway/bridge/tunnel,
+# где дефолт действительно отрицательный). Тег проставлен лишь у 5.1% длины сети
+# Саратова, поэтому lit_road_length_m измеряет полноту разметки, а не освещённость.
+# Удаление признака не ухудшило метрики и подняло PR-AUC на +0.0011 (2σ=0.0008).
+INVALID_SEMANTICS_EXCLUDED_FEATURES = {
+    "lit_road_length_m",
 }
 
 ROAD_ONLY_4_1_LOG1P_FEATURES = {
@@ -149,7 +356,290 @@ def build_road_features_without_type_lengths_no_calendar_slim_dedup(columns: lis
         feature
         for feature in build_road_features_without_type_lengths_no_calendar_slim(columns)
         if feature not in DUPLICATE_EXCLUDED_FEATURES
+        and feature not in INVALID_SEMANTICS_EXCLUDED_FEATURES
     ]
+
+
+def build_road_geo_baseline_features(columns: list[str]) -> list[str]:
+    base = [
+        f for f in build_road_features_without_type_lengths_no_calendar_slim_dedup(columns)
+        if f not in ROAD_GEO_FEATURES  # базовый билдер берёт все колонки панели — не дублируем
+        and f not in JUNCTION_V2_FEATURES  # признаки этапа 2 в бейзлайн не входят, даже если подтянуты
+        and f not in TAGS_V2_FEATURES  # признаки этапа 3 — тоже
+        and f not in GEOMETRY_V2_FEATURES  # признаки этапа 4 — тоже
+        and f not in SKDF_V2_ALL_FEATURES  # признаки этапа 5 (СКДФ) — тоже
+        and f not in EXPOSURE_V6_FEATURES  # признаки этапа 6a (экспозиция) — тоже
+    ]
+    missing = [f for f in ROAD_GEO_FEATURES if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_baseline: нет колонок {missing}; вызовите attach_road_grade_features(panel) "
+            f"или соберите их scripts/build_road_grade_features.py"
+        )
+    return [*base, *ROAD_GEO_FEATURES]
+
+
+def build_road_geo_v2_prune_features(
+    columns: list[str], keep_excluded: set[str] | frozenset[str] = frozenset()
+) -> list[str]:
+    """road_geo_baseline минус V2_PRUNE_EXCLUDED_FEATURES (порядок признаков сохраняется).
+
+    keep_excluded - признаки из списка исключений, которые нужно вернуть (абляция по группам).
+    """
+    return [
+        f for f in build_road_geo_baseline_features(columns)
+        if f not in V2_PRUNE_EXCLUDED_FEATURES or f in keep_excluded
+    ]
+
+
+def build_road_geo_v2_junctions_features(
+    columns: list[str],
+    keep_replaced: set[str] | frozenset[str] = frozenset(),
+    new_features: list[str] | None = None,
+) -> list[str]:
+    """road_geo_v2_prune минус старые признаки перекрёстков плюс новые (этап 2).
+
+    keep_replaced - старые признаки, которые нужно оставить (вариант C и поиск недостающего);
+    new_features - список новых признаков (по умолчанию V2_JUNCTIONS_NEW_FEATURES).
+    """
+    new = list(V2_JUNCTIONS_NEW_FEATURES if new_features is None else new_features)
+    missing = [f for f in new if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_v2_junctions: нет колонок {missing}; вызовите attach_junction_v2_features(panel) "
+            f"или соберите их scripts/build_junction_v2_features.py"
+        )
+    base = [
+        f for f in build_road_geo_v2_prune_features(columns)
+        if f not in V2_JUNCTIONS_REPLACED_FEATURES or f in keep_replaced
+    ]
+    return [*base, *[f for f in new if f not in base]]
+
+
+def build_road_geo_v2_tags_features(
+    columns: list[str],
+    replace_exposure: bool = True,
+    replace_semantics: bool = True,
+    extra: list[str] | tuple[str, ...] = (),
+) -> list[str]:
+    """road_geo_v2_junctions с заменами этапа 3 (на месте старых признаков, порядок сохраняется).
+
+    replace_exposure  - B1: asphalt_surface_length_m -> major_road_length_m + street_length_m;
+    replace_semantics - B2: bad_surface_share, lanes_mean_weighted, oneway_share -> v2 с NaN;
+    оба True - итоговый набор road_geo_v2_tags (B); extra - признаки, добавляемые в конец (абляция).
+    """
+    need = []
+    if replace_exposure:
+        need += [f for new in V2_TAGS_EXPOSURE_REPLACED.values() for f in new]
+    if replace_semantics:
+        need += list(V2_TAGS_SEMANTICS_REPLACED.values())
+    missing = [f for f in [*need, *extra] if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_v2_tags: нет колонок {missing}; вызовите attach_tags_v2_features(panel) "
+            f"или соберите их scripts/build_tags_v2_features.py"
+        )
+    out: list[str] = []
+    for f in build_road_geo_v2_junctions_features(columns):
+        if replace_exposure and f in V2_TAGS_EXPOSURE_REPLACED:
+            out += V2_TAGS_EXPOSURE_REPLACED[f]
+        elif replace_semantics and f in V2_TAGS_SEMANTICS_REPLACED:
+            out.append(V2_TAGS_SEMANTICS_REPLACED[f])
+        else:
+            out.append(f)
+    out += [f for f in extra if f not in out]
+    if len(out) != len(set(out)):
+        raise ValueError(f"road_geo_v2_tags: повтор признаков {out}")
+    return out
+
+
+def build_road_geo_v2_geometry_features(
+    columns: list[str],
+    replace_blocks: bool = True,
+    replace_curvature: bool = True,
+    replace_other: bool = True,
+    extra: list[str] | tuple[str, ...] = (),
+) -> list[str]:
+    """road_geo_v2_tags с заменами этапа 4 (на месте старых признаков, порядок сохраняется).
+
+    replace_blocks    - B1: road_segment_length_median, short_segment_share -> block_length_median_m;
+    replace_curvature - B2: 4 старых признака кривизны -> curvature_deg_per_km_v2, min_curve_radius_m;
+    replace_other     - B3: dead_end_count, road_orientation_entropy, railway_crossing_density_per_km ->
+                        street_dead_end_count, road_orientation_entropy_v2, level_crossing_count;
+    все True - итоговый набор road_geo_v2_geometry (B); extra - признаки, добавляемые в конец (абляция).
+    """
+    groups = [(replace_blocks, V2_GEOMETRY_BLOCKS_REPLACED), (replace_curvature, V2_GEOMETRY_CURVATURE_REPLACED),
+              (replace_other, V2_GEOMETRY_OTHER_REPLACED)]
+    mapping = {old: new for on, g in groups if on for old, new in g.items()}
+    need = [f for new in mapping.values() for f in new]
+    missing = [f for f in [*need, *extra] if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_v2_geometry: нет колонок {missing}; вызовите attach_geometry_v2_features(panel) "
+            f"или соберите их scripts/build_geometry_v2_features.py"
+        )
+    out: list[str] = []
+    for f in build_road_geo_v2_tags_features(columns):
+        out += mapping.get(f, [f])
+    out += [f for f in extra if f not in out]
+    if len(out) != len(set(out)):
+        raise ValueError(f"road_geo_v2_geometry: повтор признаков {out}")
+    return out
+
+
+def build_road_geo_v2_skdf_features(
+    columns: list[str],
+    width: bool = False,
+    coating: str | None = None,
+    hierarchy: bool = False,
+    lanes: str | None = None,
+    speed: bool = False,
+    axle: bool = False,
+    traffic: bool = False,
+    extra: list[str] | tuple[str, ...] = (),
+) -> list[str]:
+    """road_geo_v2_geometry (30) + блоки этапа 5. Замены — на месте старого признака, добавления — в конец.
+
+    width     - B1: + ширина проезжей части и ширина на полосу;
+    coating   - B2: "replace" — bad_surface_share_among_tagged -> skdf_low_coating_share; "both" — добавить;
+    hierarchy - B3: + ранг категории улицы по СП;
+    lanes     - B4: "replace" — lanes_mean_weighted_v2 -> lanes_skdf_or_osm; "both" — + skdf_lanes_mean_w;
+    speed/axle - B5: + паспортная скорость / осевая нагрузка;  traffic - B6: + skdf_real_traffic_max;
+    extra     - признаки, добавляемые в конец (абляция).
+    Итоговый набор road_geo_v2_skdf — по решению абляции (ROAD_GEO_V2_SKDF_FINAL).
+    """
+    mapping: dict[str, str] = {}
+    if coating == "replace":
+        mapping.update(V2_SKDF_COATING_REPLACED)
+    if lanes == "replace":
+        mapping.update(V2_SKDF_LANES_REPLACED)
+    add: list[str] = []
+    if width:
+        add += V2_SKDF_WIDTH
+    if coating == "both":
+        add += list(V2_SKDF_COATING_REPLACED.values())
+    if hierarchy:
+        add += V2_SKDF_HIERARCHY
+    if lanes == "both":
+        add += V2_SKDF_LANES_BOTH
+    if speed:
+        add += V2_SKDF_SPEED
+    if axle:
+        add += V2_SKDF_AXLE
+    if traffic:
+        add += V2_SKDF_TRAFFIC
+    need = [*mapping.values(), *add, *extra]
+    missing = [f for f in need if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_v2_skdf: нет колонок {missing}; вызовите attach_skdf_v2_features(panel) "
+            f"или соберите их scripts/build_skdf_v2_features.py"
+        )
+    out = [mapping.get(f, f) for f in build_road_geo_v2_geometry_features(columns)]
+    out += [f for f in [*add, *extra] if f not in out]
+    if len(out) != len(set(out)):
+        raise ValueError(f"road_geo_v2_skdf: повтор признаков {out}")
+    return out
+
+
+def attach_exposure_v6_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки этапа 6a (положение, POI, застройка, ОТ) по h3, если их ещё нет в панели.
+
+    NaN сохраняются: small_building_share и levels_tagged_share не определены в ячейке без зданий.
+    """
+    if all(f in panel.columns for f in EXPOSURE_V6_FEATURES):
+        return panel
+    if not H3_EXPOSURE_V6_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_EXPOSURE_V6_FEATURES_PARQUET} не найден — запустите scripts/build_exposure_v6_features.py"
+        )
+    ex = pd.read_parquet(H3_EXPOSURE_V6_FEATURES_PARQUET, columns=["h3", *EXPOSURE_V6_FEATURES])
+    return panel.merge(ex, on="h3", how="left")
+
+
+def build_road_geo_v2_exposure_a_features(columns: list[str]) -> list[str]:
+    """road_geo_v2_skdf (32) + признаки этапа 6a, прошедшие отбор (V2_EXPOSURE_A_FEATURES), в конец."""
+    missing = [f for f in V2_EXPOSURE_A_FEATURES if f not in columns]
+    if missing:
+        raise ValueError(
+            f"road_geo_v2_exposure_a: нет колонок {missing}; вызовите attach_exposure_v6_features(panel) "
+            f"или соберите их scripts/build_exposure_v6_features.py"
+        )
+    base = build_road_geo_v2_skdf_features(columns, **ROAD_GEO_V2_SKDF_FINAL)
+    return [*base, *[f for f in V2_EXPOSURE_A_FEATURES if f not in base]]
+
+
+def attach_skdf_v2_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки СКДФ этапа 5 по h3 и строит производные (lanes_skdf_or_osm, skdf_has_passport).
+
+    NaN сохраняются: ячейка без паспортизованной дороги (37 % ячеек панели) — «нет на балансе».
+    lanes_skdf_or_osm требует lanes_mean_weighted_v2 (attach_tags_v2_features).
+    """
+    if all(f in panel.columns for f in SKDF_V2_ALL_FEATURES):
+        return panel
+    if not H3_SKDF_V2_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_SKDF_V2_FEATURES_PARQUET} не найден — запустите scripts/build_skdf_v2_features.py"
+        )
+    sk = pd.read_parquet(H3_SKDF_V2_FEATURES_PARQUET, columns=["h3", *SKDF_V2_FEATURES])
+    out = panel.merge(sk, on="h3", how="left")
+    out["skdf_has_passport"] = out["skdf_len_m"].notna().astype(float)
+    if "lanes_mean_weighted_v2" in out.columns:
+        out["lanes_skdf_or_osm"] = out["skdf_lanes_mean_w"].fillna(out["lanes_mean_weighted_v2"])
+    return out
+
+def attach_geometry_v2_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки геометрии этапа 4 по h3, если их ещё нет в панели. NaN сохраняются
+    (нет кварталов / уличной длины < 200 м в ячейке), CatBoost обрабатывает их сам."""
+    if all(f in panel.columns for f in GEOMETRY_V2_FEATURES):
+        return panel
+    if not H3_GEOMETRY_V2_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_GEOMETRY_V2_FEATURES_PARQUET} не найден — запустите scripts/build_geometry_v2_features.py"
+        )
+    geom = pd.read_parquet(H3_GEOMETRY_V2_FEATURES_PARQUET, columns=["h3", *GEOMETRY_V2_FEATURES])
+    return panel.merge(geom, on="h3", how="left")
+
+
+def attach_tags_v2_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки тегов этапа 3 по h3, если их ещё нет в панели.
+
+    major_road_length_m и lanes_tagged_share в панели уже есть (то же определение, сверено
+    в scripts/build_tags_v2_features.py), поэтому подтягиваются только TAGS_V2_FEATURES.
+    NaN сохраняются: это «тег неизвестен», CatBoost обрабатывает их сам.
+    """
+    if all(f in panel.columns for f in TAGS_V2_FEATURES):
+        return panel
+    if not H3_TAGS_V2_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_TAGS_V2_FEATURES_PARQUET} не найден — запустите scripts/build_tags_v2_features.py"
+        )
+    tags = pd.read_parquet(H3_TAGS_V2_FEATURES_PARQUET, columns=["h3", *TAGS_V2_FEATURES])
+    return panel.merge(tags, on="h3", how="left")
+
+
+def attach_junction_v2_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки перекрёстков этапа 2 по h3, если их ещё нет в панели."""
+    if all(f in panel.columns for f in JUNCTION_V2_FEATURES):
+        return panel
+    if not H3_JUNCTION_V2_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_JUNCTION_V2_FEATURES_PARQUET} не найден — запустите scripts/build_junction_v2_features.py"
+        )
+    junc = pd.read_parquet(H3_JUNCTION_V2_FEATURES_PARQUET, columns=["h3", *JUNCTION_V2_FEATURES])
+    return panel.merge(junc, on="h3", how="left")
+
+
+def attach_road_grade_features(panel: pd.DataFrame) -> pd.DataFrame:
+    """Подтягивает признаки уклона по h3, если их ещё нет в панели."""
+    if all(f in panel.columns for f in ROAD_GEO_FEATURES):
+        return panel
+    if not H3_ROAD_GRADE_FEATURES_PARQUET.exists():
+        raise FileNotFoundError(
+            f"{H3_ROAD_GRADE_FEATURES_PARQUET} не найден — запустите scripts/build_road_grade_features.py"
+        )
+    grade = pd.read_parquet(H3_ROAD_GRADE_FEATURES_PARQUET, columns=["h3", *ROAD_GEO_FEATURES])
+    return panel.merge(grade, on="h3", how="left")
 
 
 def build_road_features_without_type_lengths_no_calendar_slim_dedup_log1p(columns: list[str]) -> list[str]:
@@ -170,6 +660,20 @@ def build_features(panel: pd.DataFrame, feature_set: str, features_arg: str | No
         return build_road_features_without_type_lengths_no_calendar_slim_dedup(list(panel.columns))
     if feature_set == FEATURE_SET_ROAD_WITHOUT_TYPE_LENGTHS_NO_CALENDAR_SLIM_DEDUP_LOG1P:
         return build_road_features_without_type_lengths_no_calendar_slim_dedup_log1p(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_BASELINE:
+        return build_road_geo_baseline_features(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_PRUNE:
+        return build_road_geo_v2_prune_features(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_JUNCTIONS:
+        return build_road_geo_v2_junctions_features(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_TAGS:
+        return build_road_geo_v2_tags_features(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_GEOMETRY:
+        return build_road_geo_v2_geometry_features(list(panel.columns))
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_SKDF:
+        return build_road_geo_v2_skdf_features(list(panel.columns), **ROAD_GEO_V2_SKDF_FINAL)
+    if feature_set == FEATURE_SET_ROAD_GEO_V2_EXPOSURE_A:
+        return build_road_geo_v2_exposure_a_features(list(panel.columns))
 
     raise ValueError(f"Unknown feature set: {feature_set}")
 
@@ -234,6 +738,21 @@ def train_and_evaluate(
     feature_importance_path: Path = PROJECT_ROOT / "reports" / "catboost_feature_importance_without_type_lengths.csv",
 ) -> None:
     panel = pd.read_parquet(panel_path)
+    ex6 = (FEATURE_SET_ROAD_GEO_V2_EXPOSURE_A,)
+    if feature_set in (FEATURE_SET_ROAD_GEO_BASELINE, FEATURE_SET_ROAD_GEO_V2_PRUNE, FEATURE_SET_ROAD_GEO_V2_JUNCTIONS,
+                       FEATURE_SET_ROAD_GEO_V2_TAGS, FEATURE_SET_ROAD_GEO_V2_GEOMETRY, FEATURE_SET_ROAD_GEO_V2_SKDF, *ex6):
+        panel = attach_road_grade_features(panel)
+    if feature_set in (FEATURE_SET_ROAD_GEO_V2_JUNCTIONS, FEATURE_SET_ROAD_GEO_V2_TAGS, FEATURE_SET_ROAD_GEO_V2_GEOMETRY,
+                       FEATURE_SET_ROAD_GEO_V2_SKDF, *ex6):
+        panel = attach_junction_v2_features(panel)
+    if feature_set in (FEATURE_SET_ROAD_GEO_V2_TAGS, FEATURE_SET_ROAD_GEO_V2_GEOMETRY, FEATURE_SET_ROAD_GEO_V2_SKDF, *ex6):
+        panel = attach_tags_v2_features(panel)
+    if feature_set in (FEATURE_SET_ROAD_GEO_V2_GEOMETRY, FEATURE_SET_ROAD_GEO_V2_SKDF, *ex6):
+        panel = attach_geometry_v2_features(panel)
+    if feature_set in (FEATURE_SET_ROAD_GEO_V2_SKDF, *ex6):
+        panel = attach_skdf_v2_features(panel)
+    if feature_set in ex6:
+        panel = attach_exposure_v6_features(panel)
     if min_road_length_m is not None:
         if "road_length_total_m" not in panel.columns:
             raise ValueError("road_length_total_m is required when --min-road-length-m is used")
