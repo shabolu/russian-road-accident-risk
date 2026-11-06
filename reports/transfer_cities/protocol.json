@@ -1,0 +1,67 @@
+{
+  "train_city": "saratov",
+  "train_years": [
+    2015,
+    2022
+  ],
+  "test_years": [
+    2023,
+    2025
+  ],
+  "bbox": {
+    "samara": [
+      53.1,
+      49.95,
+      53.35,
+      50.4
+    ],
+    "ulyanovsk": [
+      54.15,
+      48.15,
+      54.45,
+      48.65
+    ]
+  },
+  "features": [
+    "road_length_total_m",
+    "major_road_length_m",
+    "street_length_m",
+    "lanes_mean_weighted_v2",
+    "oneway_share_v2",
+    "bad_surface_share_among_tagged",
+    "crossing_count",
+    "road_share_primary",
+    "road_share_residential",
+    "road_share_secondary",
+    "road_share_service",
+    "road_share_tertiary",
+    "road_share_trunk",
+    "road_share_unclassified",
+    "public_transport_stop_count",
+    "level_crossing_count",
+    "min_curve_radius_m",
+    "block_length_median_m",
+    "road_orientation_entropy_v2",
+    "street_dead_end_count",
+    "curvature_deg_per_km_v2",
+    "street_junction_3leg_count",
+    "street_junction_4leg_count",
+    "major_x_street_unsignalized_count",
+    "signalized_junction_count",
+    "driveway_count",
+    "street_class_delta_max",
+    "junction_angle_dev_mean"
+  ],
+  "excluded": [
+    "grade_change_density_per_km",
+    "road_grade_abs_mean_weighted"
+  ],
+  "osm_snapshot": "2026-06-03",
+  "seeds": [
+    42,
+    7,
+    123,
+    2024,
+    31337
+  ]
+}

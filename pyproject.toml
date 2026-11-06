@@ -24,6 +24,10 @@ dependencies = [
 ]
 
 [project.optional-dependencies]
+geo-analysis = [
+    "shapely>=2.0",
+    "pyproj>=3.6",
+]
 notebook = [
     "ipykernel",
     "matplotlib",

@@ -1,0 +1,107 @@
+{
+  "cities": [
+    "kazan",
+    "nizhny_novgorod",
+    "ufa",
+    "samara",
+    "perm",
+    "saratov",
+    "tolyatti",
+    "izhevsk",
+    "ulyanovsk",
+    "naberezhnye_chelny",
+    "orenburg",
+    "cheboksary",
+    "penza",
+    "kirov"
+  ],
+  "boundary": "municipal OSM relations; road-cell centroids inside",
+  "secondary_subset": "15km from OSM place node; no refit",
+  "features": [
+    "road_length_total_m",
+    "major_road_length_m",
+    "street_length_m",
+    "lanes_mean_weighted_v2",
+    "oneway_share_v2",
+    "bad_surface_share_among_tagged",
+    "crossing_count",
+    "road_share_primary",
+    "road_share_residential",
+    "road_share_secondary",
+    "road_share_service",
+    "road_share_tertiary",
+    "road_share_trunk",
+    "road_share_unclassified",
+    "public_transport_stop_count",
+    "level_crossing_count",
+    "min_curve_radius_m",
+    "block_length_median_m",
+    "road_orientation_entropy_v2",
+    "street_dead_end_count",
+    "curvature_deg_per_km_v2",
+    "street_junction_3leg_count",
+    "street_junction_4leg_count",
+    "major_x_street_unsignalized_count",
+    "signalized_junction_count",
+    "driveway_count",
+    "street_class_delta_max",
+    "junction_angle_dev_mean"
+  ],
+  "target": "annual count; predictions frozen end 2022",
+  "test_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "windows": {
+    "all_2015_2022": [
+      2015,
+      2016,
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "clean_2017_2022": [
+      2017,
+      2018,
+      2019,
+      2020,
+      2021,
+      2022
+    ],
+    "control_drop_2017_2018": [
+      2015,
+      2016,
+      2019,
+      2020,
+      2021,
+      2022
+    ]
+  },
+  "loco_seeds": [
+    42,
+    7,
+    123
+  ],
+  "local_seed": 42,
+  "saratov_seeds": [
+    42,
+    7,
+    123,
+    2024,
+    31337
+  ],
+  "loco_control_seed": 42,
+  "recipe": {
+    "iterations": 800,
+    "learning_rate": 0.05,
+    "depth": 6,
+    "loss": "Tweedie:variance_power=1.3",
+    "thread_count": 3
+  },
+  "selection": "Exploratory all-city study; no hyperparameter or cluster selection on these results",
+  "pbf_timestamp": "2026-06-03T20:21:00Z"
+}

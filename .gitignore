@@ -46,3 +46,17 @@ coursework/build/
 # Прогнозы прогонов — тяжёлые и воспроизводимые скриптами
 reports/*_preds.parquet
 docs/analysis/features/stage7_count12/models/insample_preds_test_model.parquet
+
+# Reproducible city-transfer intermediate data and models
+reports/transfer_cities/extracted_roads.json
+reports/transfer_cities/*_features.parquet
+reports/transfer_cities/predictions.parquet
+reports/transfer_cities/model_*.cbm
+
+# Reproducible multicity intermediate artifacts
+reports/multicity_350k/cache/
+reports/multicity_350k/features/
+reports/multicity_350k/models/
+reports/multicity_350k/*predictions*.parquet
+reports/multicity_350k/crashes.parquet
+reports/multicity_350k/counts.parquet

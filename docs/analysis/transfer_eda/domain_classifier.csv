@@ -1,0 +1,4 @@
+a,b,spatial_oof_auc
+saratov,samara,0.7690841914343767
+saratov,ulyanovsk,0.7225684110092926
+samara,ulyanovsk,0.8221571347229807

@@ -1,0 +1,15 @@
+﻿Город;Регион;Население;Год населения;OSM node;Широта центра;Долгота центра;Снимок OSM;Источник населения;Проверка населения
+Казань;Республика Татарстан;1329825;2025;27504067;55.7946485;49.1115022;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Нижний Новгород;Нижегородская область;1198245;2025;27505889;56.3264816;44.0051395;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Уфа;Республика Башкортостан;1166098;2025;27504327;54.7261409;55.947499;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Самара;Самарская область;1154223;2025;27503945;53.1956255;50.1014927;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Пермь;Пермский край;1027518;2025;27504531;58.0108531;56.2318528;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Саратов;Саратовская область;886165;2025;27504590;51.530018;46.034683;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Тольятти;Самарская область;662683;2025;27505046;53.5098845;49.4189187;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Ижевск;Удмуртская Республика;616297;2025;1679639726;56.8529729;53.2103071;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Ульяновск;Ульяновская область;612516;2025;711715624;54.3150278;48.403373;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Набережные Челны;Республика Татарстан;548221;2025;191749240;55.7419774;52.399207;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Оренбург;Оренбургская область;536515;2025;27505509;51.7671248;55.0978517;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Чебоксары;Чувашская Республика;497061;2025;740732715;56.1399598;47.2480999;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Пенза;Пензенская область;487978;2025;27505663;53.1953477;45.0190437;2026-06-03;"OSM population, population:date=2025; source:population=wikipedia";https://www.russiametrics.ru/cities
+Киров;Кировская область;475871;2025;113548786;58.6035661;49.6666241;2026-06-03;https://43.rosstat.gov.ru/storage/mediabank/%D0%A1hislen_na_nachalo_goda%282%29.htm;https://www.russiametrics.ru/cities

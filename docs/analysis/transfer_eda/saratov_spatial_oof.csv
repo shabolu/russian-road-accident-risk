@@ -1,0 +1,2 @@
+city,method,n_cells,n_accidents,event_rate,coverage_top_1pct,coverage_oracle_top_1pct,coverage_top_5pct,coverage_oracle_top_5pct,coverage_top_10pct,coverage_oracle_top_10pct,spearman,roc_auc,pr_auc,poisson_deviance,calib_ratio,calib_top_decile_ratio
+saratov,spatial_oof_5fold,4296,3980.0,0.2574487895716946,0.11256281407035176,0.1708542713567839,0.43417085427135677,0.521105527638191,0.6472361809045226,0.7457286432160803,0.6693371718150892,0.9299694740004648,0.8489493229780093,0.856734430568655,0.9541150376267926,1.0384069350393623
