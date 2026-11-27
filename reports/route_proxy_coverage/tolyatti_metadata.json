@@ -1,0 +1,20 @@
+{
+  "city": "tolyatti",
+  "name": "Тольятти",
+  "fetched_features": 1488,
+  "features_intersecting_boundary50m": 724,
+  "segment_count": 6369,
+  "n_samples": 139998,
+  "ambiguous_length_share": 0.008564423982191762,
+  "oneway_length_share": 0.14652827833838955,
+  "matched_length_share": 0.27852178397023686,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,49.10182063956248,53.41921760298534,49.82187036043752,53.62439759701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:22.105564+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 2
+}

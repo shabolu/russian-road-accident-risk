@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+cheboksary,Чебоксары,0,4,651.9409577624572,40869
+cheboksary,Чебоксары,1,3,592.6345739776557,42840
+cheboksary,Чебоксары,2,2,78.95799532661479,5315
+cheboksary,Чебоксары,3,1,271.220895675845,17235
+cheboksary,Чебоксары,4,0,312.2462736958279,19776

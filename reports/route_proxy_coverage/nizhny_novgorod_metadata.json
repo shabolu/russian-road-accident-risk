@@ -1,0 +1,20 @@
+{
+  "city": "nizhny_novgorod",
+  "name": "Нижний Новгород",
+  "fetched_features": 17321,
+  "features_intersecting_boundary50m": 8986,
+  "segment_count": 44592,
+  "n_samples": 427502,
+  "ambiguous_length_share": 0.034929830621545734,
+  "oneway_length_share": 0.06912462173929716,
+  "matched_length_share": 0.40263649444315586,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,43.49893243471218,55.814390902985345,44.86140826528782,56.44918459701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:16.055317+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 9
+}

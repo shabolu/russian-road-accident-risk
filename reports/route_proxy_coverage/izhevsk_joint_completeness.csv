@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+izhevsk,Ижевск,0,4,1178.6349478872066,75746
+izhevsk,Ижевск,1,3,623.5210970745319,41297
+izhevsk,Ижевск,2,2,234.34289406474358,15241
+izhevsk,Ижевск,3,1,444.09735323396774,27259
+izhevsk,Ижевск,4,0,186.7977539874881,11305

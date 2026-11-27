@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+ulyanovsk,Ульяновск,0,4,1957.8207886899118,129543
+ulyanovsk,Ульяновск,1,3,751.9739754213775,51837
+ulyanovsk,Ульяновск,2,2,143.42291559364915,9130
+ulyanovsk,Ульяновск,3,1,247.3256604818135,14715
+ulyanovsk,Ульяновск,4,0,512.4456652477733,32700

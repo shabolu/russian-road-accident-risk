@@ -1,0 +1,282 @@
+[
+  {
+    "city": "kazan",
+    "name": "Казань",
+    "fetched_features": 8437,
+    "features_intersecting_boundary50m": 5481,
+    "segment_count": 31764,
+    "n_samples": 338350,
+    "ambiguous_length_share": 0.023759365020841926,
+    "oneway_length_share": 0.12238873827391498,
+    "matched_length_share": 0.41482627042559306,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,48.77264574762746,55.575996202985344,49.42918575237254,55.96535889701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:19:57.800801+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 7
+  },
+  {
+    "city": "nizhny_novgorod",
+    "name": "Нижний Новгород",
+    "fetched_features": 17321,
+    "features_intersecting_boundary50m": 8986,
+    "segment_count": 44592,
+    "n_samples": 427502,
+    "ambiguous_length_share": 0.034929830621545734,
+    "oneway_length_share": 0.06912462173929716,
+    "matched_length_share": 0.40263649444315586,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,43.49893243471218,55.814390902985345,44.86140826528782,56.44918459701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:16.055317+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 9
+  },
+  {
+    "city": "ufa",
+    "name": "Уфа",
+    "fetched_features": 4802,
+    "features_intersecting_boundary50m": 2678,
+    "segment_count": 20696,
+    "n_samples": 240633,
+    "ambiguous_length_share": 0.023129268203334392,
+    "oneway_length_share": 0.10547435071937832,
+    "matched_length_share": 0.3830270566983738,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,55.73194628891936,54.473612902985344,56.34522241108064,54.98718699701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:04.901367+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 5
+  },
+  {
+    "city": "samara",
+    "name": "Самара",
+    "fetched_features": 5129,
+    "features_intersecting_boundary50m": 2168,
+    "segment_count": 15445,
+    "n_samples": 224319,
+    "ambiguous_length_share": 0.033019587136464204,
+    "oneway_length_share": 0.1227446288879805,
+    "matched_length_share": 0.3544603587384893,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,49.68640472029485,53.06476190298534,50.43537347970515,53.578071597014656,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:14.202333+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 4
+  },
+  {
+    "city": "perm",
+    "name": "Пермь",
+    "fetched_features": 7490,
+    "features_intersecting_boundary50m": 4285,
+    "segment_count": 22466,
+    "n_samples": 324131,
+    "ambiguous_length_share": 0.008522999676621203,
+    "oneway_length_share": 0.09114165122672135,
+    "matched_length_share": 0.3810098893295215,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,55.748045828840375,57.84053310298534,56.70751527115963,58.204293697014656,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:20.655574+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 8
+  },
+  {
+    "city": "saratov",
+    "name": "Саратов",
+    "fetched_features": 7695,
+    "features_intersecting_boundary50m": 5641,
+    "segment_count": 31795,
+    "n_samples": 376278,
+    "ambiguous_length_share": 0.034238831372954276,
+    "oneway_length_share": 0.06503229287343532,
+    "matched_length_share": 0.3004260040193114,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,45.26580957470579,51.16264790298534,46.34184542529421,51.92448249701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:27.910244+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 5
+  },
+  {
+    "city": "tolyatti",
+    "name": "Тольятти",
+    "fetched_features": 1488,
+    "features_intersecting_boundary50m": 724,
+    "segment_count": 6369,
+    "n_samples": 139998,
+    "ambiguous_length_share": 0.008564423982191762,
+    "oneway_length_share": 0.14652827833838955,
+    "matched_length_share": 0.27852178397023686,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,49.10182063956248,53.41921760298534,49.82187036043752,53.62439759701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:22.105564+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 2
+  },
+  {
+    "city": "izhevsk",
+    "name": "Ижевск",
+    "fetched_features": 4016,
+    "features_intersecting_boundary50m": 2118,
+    "segment_count": 14924,
+    "n_samples": 170848,
+    "ambiguous_length_share": 0.0908027104730942,
+    "oneway_length_share": 0.06369460814408244,
+    "matched_length_share": 0.3627574497092774,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,52.9572714971403,56.68926690298534,53.4406662028597,57.031894597014656,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:31.649354+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 2
+  },
+  {
+    "city": "ulyanovsk",
+    "name": "Ульяновск",
+    "fetched_features": 4921,
+    "features_intersecting_boundary50m": 3306,
+    "segment_count": 19123,
+    "n_samples": 237925,
+    "ambiguous_length_share": 0.03466666088112878,
+    "oneway_length_share": 0.08250741298216867,
+    "matched_length_share": 0.3050272519054465,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,48.0092359325663,54.11171490298534,48.7719319674337,54.44868669701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:33.233642+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 4
+  },
+  {
+    "city": "naberezhnye_chelny",
+    "name": "Набережные Челны",
+    "fetched_features": 2878,
+    "features_intersecting_boundary50m": 1752,
+    "segment_count": 14641,
+    "n_samples": 127730,
+    "ambiguous_length_share": 0.1164928424734906,
+    "oneway_length_share": 0.2183975799676472,
+    "matched_length_share": 0.4666325143267994,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,52.135677573017915,55.60846180298534,52.621520326982086,55.81712979701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:34.791537+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 2
+  },
+  {
+    "city": "orenburg",
+    "name": "Оренбург",
+    "fetched_features": 4015,
+    "features_intersecting_boundary50m": 1619,
+    "segment_count": 11902,
+    "n_samples": 180778,
+    "ambiguous_length_share": 0.008446784324237627,
+    "oneway_length_share": 0.0564670317222024,
+    "matched_length_share": 0.34444065764892917,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,54.01227250434082,51.39054260298534,55.64789279565918,51.97467599701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:37.602499+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 3
+  },
+  {
+    "city": "cheboksary",
+    "name": "Чебоксары",
+    "fetched_features": 2386,
+    "features_intersecting_boundary50m": 799,
+    "segment_count": 9056,
+    "n_samples": 126035,
+    "ambiguous_length_share": 0.004054401012963578,
+    "oneway_length_share": 0.11425409466632427,
+    "matched_length_share": 0.28757234566844575,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,46.99913921592095,56.024182202985344,47.51356598407905,56.32559049701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:37.394087+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 2
+  },
+  {
+    "city": "penza",
+    "name": "Пенза",
+    "fetched_features": 2086,
+    "features_intersecting_boundary50m": 1502,
+    "segment_count": 12992,
+    "n_samples": 167285,
+    "ambiguous_length_share": 0.013930413359802,
+    "oneway_length_share": 0.07019852129721967,
+    "matched_length_share": 0.2751640023493016,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,44.78477461179554,53.071876202985344,45.27581988820445,53.31620409701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:40.209978+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 2
+  },
+  {
+    "city": "kirov",
+    "name": "Киров",
+    "fetched_features": 4410,
+    "features_intersecting_boundary50m": 3135,
+    "segment_count": 14511,
+    "n_samples": 189011,
+    "ambiguous_length_share": 0.01902732359941045,
+    "oneway_length_share": 0.037175518402506935,
+    "matched_length_share": 0.33054254440374875,
+    "skdf_provenance": {
+      "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+      "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+      "cql": "BBOX(geom,49.062487510109996,58.40403690298534,49.86889618989,58.75943949701466,'EPSG:4326')",
+      "fetched_utc": "2026-11-06T09:20:46.732695+00:00",
+      "srs": "EPSG:4326"
+    },
+    "osm_snapshot": "2026-06-03",
+    "elapsed_s": 3
+  }
+]

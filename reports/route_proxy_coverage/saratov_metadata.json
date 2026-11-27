@@ -1,0 +1,20 @@
+{
+  "city": "saratov",
+  "name": "Саратов",
+  "fetched_features": 7695,
+  "features_intersecting_boundary50m": 5641,
+  "segment_count": 31795,
+  "n_samples": 376278,
+  "ambiguous_length_share": 0.034238831372954276,
+  "oneway_length_share": 0.06503229287343532,
+  "matched_length_share": 0.3004260040193114,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,45.26580957470579,51.16264790298534,46.34184542529421,51.92448249701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:27.910244+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 5
+}

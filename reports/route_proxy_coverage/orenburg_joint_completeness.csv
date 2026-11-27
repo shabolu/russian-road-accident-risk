@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+orenburg,Оренбург,0,4,1457.8755300167275,89141
+orenburg,Оренбург,1,3,417.3211120524106,26009
+orenburg,Оренбург,2,2,98.15637397638118,6176
+orenburg,Оренбург,3,1,348.0160007354061,20533
+orenburg,Оренбург,4,0,660.8162029645459,38919

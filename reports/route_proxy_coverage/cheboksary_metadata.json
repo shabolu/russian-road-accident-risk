@@ -1,0 +1,20 @@
+{
+  "city": "cheboksary",
+  "name": "Чебоксары",
+  "fetched_features": 2386,
+  "features_intersecting_boundary50m": 799,
+  "segment_count": 9056,
+  "n_samples": 126035,
+  "ambiguous_length_share": 0.004054401012963578,
+  "oneway_length_share": 0.11425409466632427,
+  "matched_length_share": 0.28757234566844575,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,46.99913921592095,56.024182202985344,47.51356598407905,56.32559049701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:37.394087+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 2
+}

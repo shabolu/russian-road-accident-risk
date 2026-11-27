@@ -1,0 +1,20 @@
+{
+  "city": "kazan",
+  "name": "Казань",
+  "fetched_features": 8437,
+  "features_intersecting_boundary50m": 5481,
+  "segment_count": 31764,
+  "n_samples": 338350,
+  "ambiguous_length_share": 0.023759365020841926,
+  "oneway_length_share": 0.12238873827391498,
+  "matched_length_share": 0.41482627042559306,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,48.77264574762746,55.575996202985344,49.42918575237254,55.96535889701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:19:57.800801+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 7
+}

@@ -1,0 +1,20 @@
+{
+  "city": "perm",
+  "name": "Пермь",
+  "fetched_features": 7490,
+  "features_intersecting_boundary50m": 4285,
+  "segment_count": 22466,
+  "n_samples": 324131,
+  "ambiguous_length_share": 0.008522999676621203,
+  "oneway_length_share": 0.09114165122672135,
+  "matched_length_share": 0.3810098893295215,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,55.748045828840375,57.84053310298534,56.70751527115963,58.204293697014656,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:20.655574+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 8
+}

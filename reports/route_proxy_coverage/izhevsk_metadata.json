@@ -1,0 +1,20 @@
+{
+  "city": "izhevsk",
+  "name": "Ижевск",
+  "fetched_features": 4016,
+  "features_intersecting_boundary50m": 2118,
+  "segment_count": 14924,
+  "n_samples": 170848,
+  "ambiguous_length_share": 0.0908027104730942,
+  "oneway_length_share": 0.06369460814408244,
+  "matched_length_share": 0.3627574497092774,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,52.9572714971403,56.68926690298534,53.4406662028597,57.031894597014656,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:31.649354+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 2
+}

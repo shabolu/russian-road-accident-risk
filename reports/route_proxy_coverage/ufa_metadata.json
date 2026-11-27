@@ -1,0 +1,20 @@
+{
+  "city": "ufa",
+  "name": "Уфа",
+  "fetched_features": 4802,
+  "features_intersecting_boundary50m": 2678,
+  "segment_count": 20696,
+  "n_samples": 240633,
+  "ambiguous_length_share": 0.023129268203334392,
+  "oneway_length_share": 0.10547435071937832,
+  "matched_length_share": 0.3830270566983738,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,55.73194628891936,54.473612902985344,56.34522241108064,54.98718699701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:04.901367+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 5
+}

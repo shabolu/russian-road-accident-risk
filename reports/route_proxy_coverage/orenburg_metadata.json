@@ -1,0 +1,20 @@
+{
+  "city": "orenburg",
+  "name": "Оренбург",
+  "fetched_features": 4015,
+  "features_intersecting_boundary50m": 1619,
+  "segment_count": 11902,
+  "n_samples": 180778,
+  "ambiguous_length_share": 0.008446784324237627,
+  "oneway_length_share": 0.0564670317222024,
+  "matched_length_share": 0.34444065764892917,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,54.01227250434082,51.39054260298534,55.64789279565918,51.97467599701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:37.602499+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 3
+}

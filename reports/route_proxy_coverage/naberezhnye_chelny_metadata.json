@@ -1,0 +1,20 @@
+{
+  "city": "naberezhnye_chelny",
+  "name": "Набережные Челны",
+  "fetched_features": 2878,
+  "features_intersecting_boundary50m": 1752,
+  "segment_count": 14641,
+  "n_samples": 127730,
+  "ambiguous_length_share": 0.1164928424734906,
+  "oneway_length_share": 0.2183975799676472,
+  "matched_length_share": 0.4666325143267994,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,52.135677573017915,55.60846180298534,52.621520326982086,55.81712979701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:34.791537+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 2
+}

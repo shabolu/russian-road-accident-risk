@@ -1,0 +1,20 @@
+{
+  "city": "kirov",
+  "name": "Киров",
+  "fetched_features": 4410,
+  "features_intersecting_boundary50m": 3135,
+  "segment_count": 14511,
+  "n_samples": 189011,
+  "ambiguous_length_share": 0.01902732359941045,
+  "oneway_length_share": 0.037175518402506935,
+  "matched_length_share": 0.33054254440374875,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,49.062487510109996,58.40403690298534,49.86889618989,58.75943949701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:46.732695+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 3
+}

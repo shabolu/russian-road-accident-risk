@@ -1,0 +1,20 @@
+{
+  "city": "ulyanovsk",
+  "name": "Ульяновск",
+  "fetched_features": 4921,
+  "features_intersecting_boundary50m": 3306,
+  "segment_count": 19123,
+  "n_samples": 237925,
+  "ambiguous_length_share": 0.03466666088112878,
+  "oneway_length_share": 0.08250741298216867,
+  "matched_length_share": 0.3050272519054465,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,48.0092359325663,54.11171490298534,48.7719319674337,54.44868669701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:33.233642+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 4
+}

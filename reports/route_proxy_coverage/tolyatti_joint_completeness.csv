@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+tolyatti,Тольятти,0,4,896.9654274703842,55451
+tolyatti,Тольятти,1,3,324.2428964145435,20586
+tolyatti,Тольятти,2,2,408.69939302083014,26186
+tolyatti,Тольятти,3,1,292.96300863601033,17595
+tolyatti,Тольятти,4,0,346.4472262567933,20180

@@ -1,0 +1,6 @@
+city,name,known_features,missing_features,known_length_km,n_samples
+naberezhnye_chelny,Набережные Челны,0,4,762.3387323644839,47961
+naberezhnye_chelny,Набережные Челны,1,3,293.4100850265613,22778
+naberezhnye_chelny,Набережные Челны,2,2,156.7290989522409,9875
+naberezhnye_chelny,Набережные Челны,3,1,296.4147636529639,17904
+naberezhnye_chelny,Набережные Челны,4,0,417.3338714288258,29212

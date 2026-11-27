@@ -1,0 +1,20 @@
+{
+  "city": "samara",
+  "name": "Самара",
+  "fetched_features": 5129,
+  "features_intersecting_boundary50m": 2168,
+  "segment_count": 15445,
+  "n_samples": 224319,
+  "ambiguous_length_share": 0.033019587136464204,
+  "oneway_length_share": 0.1227446288879805,
+  "matched_length_share": 0.3544603587384893,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,49.68640472029485,53.06476190298534,50.43537347970515,53.578071597014656,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:14.202333+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 4
+}

@@ -1,0 +1,20 @@
+{
+  "city": "penza",
+  "name": "Пенза",
+  "fetched_features": 2086,
+  "features_intersecting_boundary50m": 1502,
+  "segment_count": 12992,
+  "n_samples": 167285,
+  "ambiguous_length_share": 0.013930413359802,
+  "oneway_length_share": 0.07019852129721967,
+  "matched_length_share": 0.2751640023493016,
+  "skdf_provenance": {
+    "endpoint": "https://xn--d1aluo.xn--p1ai/api-geoserver/skdf_open/wfs",
+    "layer": "skdf_open:lyr_road_conditions_road_normative_condition",
+    "cql": "BBOX(geom,44.78477461179554,53.071876202985344,45.27581988820445,53.31620409701466,'EPSG:4326')",
+    "fetched_utc": "2026-11-06T09:20:40.209978+00:00",
+    "srs": "EPSG:4326"
+  },
+  "osm_snapshot": "2026-06-03",
+  "elapsed_s": 2
+}
