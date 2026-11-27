@@ -1,0 +1,20 @@
+{
+  "road_length_total_m": 3673.786777368451,
+  "major_road_length_m": 1138.5922345715746,
+  "street_length_m": 2107.5253604717195,
+  "lanes_mean_weighted_v2": 4.425903007540981,
+  "crossing_count": 11.0,
+  "public_transport_stop_count": 7.0,
+  "level_crossing_count": 2.0,
+  "block_length_median_m": 9087.623285748967,
+  "road_orientation_entropy_v2": 2.6484333770438173,
+  "street_dead_end_count": 4.0,
+  "curvature_deg_per_km_v2": 595.5851805505952,
+  "street_junction_3leg_count": 10.0,
+  "street_junction_4leg_count": 5.0,
+  "major_x_street_unsignalized_count": 3.0,
+  "signalized_junction_count": 3.0,
+  "driveway_count": 16.0,
+  "street_class_delta_max": 4.0,
+  "junction_angle_dev_mean": 79.02992929534499
+}

@@ -1,0 +1,19 @@
+{
+  "reports/multicity_350k/counts.parquet": "eeaad86cdc09cc02df9318bddacc5867f28a4fbb1584cef690e70fcd1ea5f479",
+  "reports/multicity_350k/metrics.csv": "070a65875a55e659b81cd5a364141dc086b7cd11a9a44873805fccb17b762efe",
+  "reports/multicity_350k/protocol.json": "9afbcb022f64bf878058aed0ab69a8ecc9d594cf3541b815e365267ffcbbf191",
+  "reports/multicity_350k/features/cheboksary.parquet": "7be10822140ad47a0afc1d77c197e93ca8ccfe06bcd6375540b65d99d9ee5407",
+  "reports/multicity_350k/features/izhevsk.parquet": "a3ece6e039080dd08b7ccfbc748dac2dc6e4cd58d84a8602caee668f3b7df96a",
+  "reports/multicity_350k/features/kazan.parquet": "f9e33e51edda1e72e5a92457ae24980465b7c623f4ce2ef8c075ed63e8a38027",
+  "reports/multicity_350k/features/kirov.parquet": "e5d5c3482f01ca654480e05abe67b005b0a0242e9dc166ca88059058a5e14ad0",
+  "reports/multicity_350k/features/naberezhnye_chelny.parquet": "b0d24d5ad25a0f429e90c8021da69232b9386b4f4edb2a24940fa26abe417d8e",
+  "reports/multicity_350k/features/nizhny_novgorod.parquet": "d9478dd7bc03fbc1a30d4b14b63c3e654de3f330a74d685bc67516330a580be0",
+  "reports/multicity_350k/features/orenburg.parquet": "0dc768f747f5ab830aa9afe9684caa7558ba50346a4d0cd918b2bf0a14d7063e",
+  "reports/multicity_350k/features/penza.parquet": "719d62fcddc6533ad9b1abe6839d5cda0a76e2ec7d043a522a4a04345b425f13",
+  "reports/multicity_350k/features/perm.parquet": "f85a42fe7e5d8c4e30c88a089e30dfabfc6458a300dbe3c4cd9a3363655ef50c",
+  "reports/multicity_350k/features/samara.parquet": "503a3b978a1c8f27d82cc4c71fc817956d6f8ad4a70f3364d81600fef978cb86",
+  "reports/multicity_350k/features/saratov.parquet": "fdd34114fe50a2681cd206eeed8e1dc3a991a7cdb86161a8ad3c1c020641367f",
+  "reports/multicity_350k/features/tolyatti.parquet": "a3b470bd0d276b938d4615e186dbdbe2970c092a7fe44f14648042ce8e72cfe7",
+  "reports/multicity_350k/features/ufa.parquet": "c96274f8ded6e83e5e72ae8ab4bcddb97757b2a08f02c91be16ecfa07da3e73f",
+  "reports/multicity_350k/features/ulyanovsk.parquet": "17cb0bfc16e52f05dcbd692e7cf1161093588ef2293ecbca634fc7d64f2891d7"
+}

@@ -1,0 +1,65 @@
+{
+  "objective": "Equal importance of every settlement in evaluation, including lower tail",
+  "primary_metric": "macro mean city coverage@10 on completely held-out cities",
+  "secondary_metrics": [
+    "coverage@1/5",
+    "fraction of realized oracle coverage",
+    "worst and lower-quartile city coverage",
+    "macro abs(log(calibration ratio))"
+  ],
+  "comparison": "uniform rows cached baseline vs equal total city training weight",
+  "weight": "N_total / (K_train_cities * N_rows_in_city), normalized mean 1",
+  "train_years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "test_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "features": [
+    "road_length_total_m",
+    "major_road_length_m",
+    "street_length_m",
+    "lanes_mean_weighted_v2",
+    "oneway_share_v2",
+    "bad_surface_share_among_tagged",
+    "crossing_count",
+    "road_share_primary",
+    "road_share_residential",
+    "road_share_secondary",
+    "road_share_service",
+    "road_share_tertiary",
+    "road_share_trunk",
+    "road_share_unclassified",
+    "public_transport_stop_count",
+    "level_crossing_count",
+    "min_curve_radius_m",
+    "block_length_median_m",
+    "road_orientation_entropy_v2",
+    "street_dead_end_count",
+    "curvature_deg_per_km_v2",
+    "street_junction_3leg_count",
+    "street_junction_4leg_count",
+    "major_x_street_unsignalized_count",
+    "signalized_junction_count",
+    "driveway_count",
+    "street_class_delta_max",
+    "junction_angle_dev_mean"
+  ],
+  "preprocessing": "Unweighted train-only p99 identical to baseline, isolates sample-weight change",
+  "scope": "14 municipal cohorts of >350k cities; smaller settlements not validated",
+  "selection": "Exploratory fixed weighting formula; no tuning or feature selection; target excluded from training"
+}

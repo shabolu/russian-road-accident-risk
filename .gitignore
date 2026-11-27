@@ -60,3 +60,21 @@ reports/multicity_350k/models/
 reports/multicity_350k/*predictions*.parquet
 reports/multicity_350k/crashes.parquet
 reports/multicity_350k/counts.parquet
+
+# Equal-city weighting predictions remain local
+reports/multicity_350k/equal_city_weights/*predictions.parquet
+
+# Geometry matching intermediates for routing attribute coverage
+reports/route_proxy_coverage/ways/
+
+# Reproducible routing experiment intermediates
+reports/route_proxy_experiments/**/*.parquet
+reports/route_proxy_experiments/**/*.cbm
+reports/route_proxy_experiments/**/*.pid
+reports/route_proxy_experiments/evaluation*/folds/
+reports/route_proxy_experiments/graph*/
+reports/route_proxy_experiments/h3*/
+reports/route_proxy_experiments/gaps/
+reports/route_proxy_experiments/observations/
+reports/route_proxy_experiments/benchmark/*/*review.csv
+docs/analysis/features/stage7_count12/noise_ceiling/sim_draws_test.parquet
