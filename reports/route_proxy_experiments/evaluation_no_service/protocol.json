@@ -1,0 +1,148 @@
+{
+  "cities": [
+    "kazan",
+    "nizhny_novgorod",
+    "ufa",
+    "samara",
+    "perm",
+    "saratov",
+    "tolyatti",
+    "izhevsk",
+    "ulyanovsk",
+    "naberezhnye_chelny",
+    "orenburg",
+    "cheboksary",
+    "penza",
+    "kirov"
+  ],
+  "requested_targets": [
+    "saratov",
+    "samara",
+    "ulyanovsk",
+    "kazan",
+    "nizhny_novgorod",
+    "ufa",
+    "perm",
+    "tolyatti",
+    "izhevsk",
+    "naberezhnye_chelny",
+    "orenburg",
+    "cheboksary",
+    "penza",
+    "kirov"
+  ],
+  "seeds": [
+    42,
+    7,
+    123
+  ],
+  "profiles": [
+    "baseline",
+    "strict"
+  ],
+  "train_years": [
+    2015,
+    2016,
+    2017,
+    2018,
+    2019,
+    2020,
+    2021,
+    2022
+  ],
+  "test_years": [
+    2023,
+    2024,
+    2025
+  ],
+  "control": "Cached equal-city results with source fingerprints and optional prediction parity",
+  "added_feature": "Share of fixed OD sample routes crossing the H3 cell, one contribution per route",
+  "model": {
+    "iterations": 800,
+    "learning_rate": 0.05,
+    "depth": 6,
+    "loss": "Tweedie:variance_power=1.3"
+  },
+  "clipping": "Unweighted p99 fit on training rows only",
+  "weights": "Equal total training weight per donor city, normalized to mean one",
+  "interpretation": "Retrospective experiment reconstructing earlier features from 2026 OSM and SKDF",
+  "primary_metric": "Municipal coverage@10 across 2023-2025, averaged across seeds then cities",
+  "lower_quartile": "Mean of the lowest ceil(n/4) city scores; also report delta on the control\u2019s weakest cities",
+  "route_inputs": {
+    "kazan": {
+      "baseline": "7f0d5585c59c8eec4a53176a35fef885fc0d64c11b0b9c3119bb6bd4ad7976f8",
+      "strict": "1d019f2d3e369e52e33401fff72c3e0a5cde28183b2bc7cde44bf67042f2b472"
+    },
+    "nizhny_novgorod": {
+      "baseline": "ce5704dbf4ee9cf5b7625aba0c2a232108556601f62c0f7f89b24321c392ecd9",
+      "strict": "56db2377b6393aa003bee125ea9eb455b0d84fd77c9c0768b7d8a97e17aa5639"
+    },
+    "ufa": {
+      "baseline": "cc9d39fe5831985658a1735560658de83d8ffcb1f6f357bbf2126d2313d255a4",
+      "strict": "09e377aa4e16cc6282e2faeb65bb2071e48a356969d24f755a2c830505cbc712"
+    },
+    "samara": {
+      "baseline": "ae741c0c32437ea829f8453171703c6090af4ac475e13e8125ba34d24f585ebe",
+      "strict": "a203c39ccec6b539cc3095e3eaed5ef2b53e4ea472f1ca519d9c51d173de0be9"
+    },
+    "perm": {
+      "baseline": "763bb8568d245f71aab0c1ae65f867c51cfd5fd5ad1bf0bf0584741c21947dfe",
+      "strict": "2a3dbc63cffcc817e92c5ad156e208a8831fc66b319fbd13c4b96e06f6d09fce"
+    },
+    "saratov": {
+      "baseline": "6e05229712e134541228e290ef86356c96761eae00f0426f57b903de1b279f0a",
+      "strict": "b9b271508b705082ae9ca00b25e4ffbf69ceacdc353cc0ab5691b12c3400ad49"
+    },
+    "tolyatti": {
+      "baseline": "026a6ebfc3f701a40884e2efd091e97e30d4168b04e8b4a331f78ac9ddb19ef4",
+      "strict": "03fcf4a24ef3fd830b96dfe96157ef45529a6d16099af489de569e265d25b0c8"
+    },
+    "izhevsk": {
+      "baseline": "3b5d69f7baf99a7e57f056dd296bfb98e6452e1cc7aaab99f311801e32bca82c",
+      "strict": "5a289621ae421873e20504051499258853e12f344f9232e0ca137912c64d545a"
+    },
+    "ulyanovsk": {
+      "baseline": "d94f0a3b74f11d7c8764f1d017b05f4a38fd6bb33c8adc2aeb68f2d3e39289a8",
+      "strict": "c85ee90f84f48f2f2200419b117986ddb024d679a79a4ebcde33c7409e63d4c6"
+    },
+    "naberezhnye_chelny": {
+      "baseline": "2c016c18555f019e00c432153151cae199146033b7d0b08b18f93dc619e2cb32",
+      "strict": "7936209b378fbe2ed3074c552036642421a6686db63d14481c33df7af56db59d"
+    },
+    "orenburg": {
+      "baseline": "75e7bc7a562740257dd31437cc3517706e35d859408955d45b127ffc392f634a",
+      "strict": "487534c71310ef4fb55a38fb2d7a914fe30ef10bc1414b4658be5fbefa583000"
+    },
+    "cheboksary": {
+      "baseline": "45c81440f94bda03d397bff828b6ab3fd646c2d3000fdd09c709156fbf1db18c",
+      "strict": "6c73a4387cfcf0cca0223f2d1ac54d31c826f8ba89c67b2c807f574f40a2ec2d"
+    },
+    "penza": {
+      "baseline": "883f0cc4f04342b7cc2a5382d9ca2a4848147af0a82157fc5d9bdd3c930f0d6f",
+      "strict": "aafd1dfdf447e07787ab06e1e68b801dda17c86108124f03f43a62997ea1b2d6"
+    },
+    "kirov": {
+      "baseline": "55205817e84f804964c4960b3f16db30981ffe650158fed88d5f14e0c8855696",
+      "strict": "88305c8472033acb5d79ef2bd8facb0180490aaaf6dcb38a2a4ff4e6625b77f8"
+    }
+  },
+  "control_inputs": {
+    "reports/multicity_350k/counts.parquet": "eeaad86cdc09cc02df9318bddacc5867f28a4fbb1584cef690e70fcd1ea5f479",
+    "reports/multicity_350k/metrics.csv": "070a65875a55e659b81cd5a364141dc086b7cd11a9a44873805fccb17b762efe",
+    "reports/multicity_350k/protocol.json": "9afbcb022f64bf878058aed0ab69a8ecc9d594cf3541b815e365267ffcbbf191",
+    "reports/multicity_350k/features/cheboksary.parquet": "7be10822140ad47a0afc1d77c197e93ca8ccfe06bcd6375540b65d99d9ee5407",
+    "reports/multicity_350k/features/izhevsk.parquet": "a3ece6e039080dd08b7ccfbc748dac2dc6e4cd58d84a8602caee668f3b7df96a",
+    "reports/multicity_350k/features/kazan.parquet": "f9e33e51edda1e72e5a92457ae24980465b7c623f4ce2ef8c075ed63e8a38027",
+    "reports/multicity_350k/features/kirov.parquet": "e5d5c3482f01ca654480e05abe67b005b0a0242e9dc166ca88059058a5e14ad0",
+    "reports/multicity_350k/features/naberezhnye_chelny.parquet": "b0d24d5ad25a0f429e90c8021da69232b9386b4f4edb2a24940fa26abe417d8e",
+    "reports/multicity_350k/features/nizhny_novgorod.parquet": "d9478dd7bc03fbc1a30d4b14b63c3e654de3f330a74d685bc67516330a580be0",
+    "reports/multicity_350k/features/orenburg.parquet": "0dc768f747f5ab830aa9afe9684caa7558ba50346a4d0cd918b2bf0a14d7063e",
+    "reports/multicity_350k/features/penza.parquet": "719d62fcddc6533ad9b1abe6839d5cda0a76e2ec7d043a522a4a04345b425f13",
+    "reports/multicity_350k/features/perm.parquet": "f85a42fe7e5d8c4e30c88a089e30dfabfc6458a300dbe3c4cd9a3363655ef50c",
+    "reports/multicity_350k/features/samara.parquet": "503a3b978a1c8f27d82cc4c71fc817956d6f8ad4a70f3364d81600fef978cb86",
+    "reports/multicity_350k/features/saratov.parquet": "fdd34114fe50a2681cd206eeed8e1dc3a991a7cdb86161a8ad3c1c020641367f",
+    "reports/multicity_350k/features/tolyatti.parquet": "a3b470bd0d276b938d4615e186dbdbe2970c092a7fe44f14648042ce8e72cfe7",
+    "reports/multicity_350k/features/ufa.parquet": "c96274f8ded6e83e5e72ae8ab4bcddb97757b2a08f02c91be16ecfa07da3e73f",
+    "reports/multicity_350k/features/ulyanovsk.parquet": "17cb0bfc16e52f05dcbd692e7cf1161093588ef2293ecbca634fc7d64f2891d7"
+  }
+}

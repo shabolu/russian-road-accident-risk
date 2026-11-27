@@ -1,0 +1,4 @@
+profile,control,completed_cities,requested_cities,seeds,macro_coverage_at_10,control_macro_coverage_at_10,macro_delta_coverage_at_10,weak_control_cities,weak_control_cities_delta,lowest_quartile_mean,control_lowest_quartile_mean,improved_cities,worsened_cities
+baseline,no_route,14,14,3,0.6086813743411178,0.6064790800955162,0.0022022942456016107,"naberezhnye_chelny,tolyatti,samara,cheboksary",0.0019469089606955988,0.5030692406420445,0.5011223316813489,10,4
+strict,no_route,14,14,3,0.6071178307761622,0.6064790800955162,0.0006387506806458864,"naberezhnye_chelny,tolyatti,samara,cheboksary",0.00035624096631774654,0.5014785726476667,0.5011223316813489,8,6
+strict,baseline,14,14,3,0.6071178307761622,0.6086813743411178,-0.0015635435649557247,"tolyatti,naberezhnye_chelny,samara,cheboksary",-0.0015906679943778527,0.5014785726476667,0.5030692406420445,6,8

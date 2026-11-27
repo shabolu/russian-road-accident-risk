@@ -1,0 +1,108 @@
+[
+  {
+    "case": "ust_kurdyum_reverse_oneway_forward_absent",
+    "profile": null,
+    "passed": true
+  },
+  {
+    "case": "ust_kurdyum_reverse_oneway_backward_present",
+    "profile": null,
+    "passed": true
+  },
+  {
+    "case": "trofimovsky_bridge_over_shekhurdina",
+    "profile": null,
+    "passed": true
+  },
+  {
+    "case": "closed_gate_blocks_traversal",
+    "profile": "class_cost",
+    "passed": true,
+    "way_ids": []
+  },
+  {
+    "case": "closed_gate_blocks_traversal",
+    "profile": "distance_only",
+    "passed": true,
+    "way_ids": []
+  },
+  {
+    "case": "tankistov_sokolovaya_no_left_turn",
+    "profile": "class_cost",
+    "passed": true,
+    "way_ids": [
+      202529606,
+      10507577,
+      10507577,
+      62174662
+    ]
+  },
+  {
+    "case": "tankistov_sokolovaya_no_left_turn",
+    "profile": "distance_only",
+    "passed": true,
+    "way_ids": [
+      202529606,
+      10507577,
+      10507577,
+      62174662
+    ]
+  },
+  {
+    "case": "astrakhanskaya_local_destination",
+    "profile": "class_cost",
+    "passed": true,
+    "way_ids": [
+      100874940,
+      160196363,
+      160196363,
+      160196363,
+      160196363
+    ]
+  },
+  {
+    "case": "astrakhanskaya_local_destination",
+    "profile": "distance_only",
+    "passed": true,
+    "way_ids": [
+      100874940,
+      160196363,
+      160196363,
+      160196363,
+      160196363
+    ]
+  },
+  {
+    "case": "pugacheva_local_only_no_through_route",
+    "profile": "class_cost",
+    "passed": true,
+    "way_ids": [
+      163420017,
+      163420017,
+      163420017,
+      163420017
+    ]
+  },
+  {
+    "case": "pugacheva_local_only_no_through_route",
+    "profile": "distance_only",
+    "passed": true,
+    "way_ids": [
+      163420017,
+      163420017,
+      163420017,
+      163420017
+    ]
+  },
+  {
+    "case": "pugacheva_local_only_no_through_route",
+    "profile": "cheap_forbidden_cut_through",
+    "passed": true,
+    "way_ids": [
+      163420017,
+      163420017,
+      163420017,
+      163420017
+    ]
+  }
+]

@@ -1,0 +1,9 @@
+{
+  "seed": 20261124,
+  "per_stratum": 8,
+  "missing_ways": 20770,
+  "sampled_missing_ways": 64,
+  "candidate_status": "ready",
+  "candidate_way_reasons": 36731,
+  "sampled_candidates": 160
+}

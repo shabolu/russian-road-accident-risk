@@ -1,0 +1,68 @@
+{
+  "city": "saratov",
+  "expected_from": "OSM tags and shared node IDs, snapshot 2026-06-03; independent real-world verification pending",
+  "cases": [
+    {
+      "id": "ust_kurdyum_reverse_oneway_forward_absent",
+      "kind": "edge",
+      "way_id": 119497683,
+      "source": 1231988590,
+      "target": 1348497357,
+      "present": false,
+      "evidence": "oneway=-1 permits travel opposite to the order of the original OSM way"
+    },
+    {
+      "id": "ust_kurdyum_reverse_oneway_backward_present",
+      "kind": "edge",
+      "way_id": 119497683,
+      "source": 1348497357,
+      "target": 1231988590,
+      "present": true,
+      "evidence": "Allowed reverse traversal on the same original node pair"
+    },
+    {
+      "id": "trofimovsky_bridge_over_shekhurdina",
+      "kind": "separate_ways",
+      "way_ids": [30829982, 867769435],
+      "crossing_lon_lat": [45.9498612, 51.5926146],
+      "evidence": "Geometries cross, bridge=yes and layer=1 on the first way, with no shared OSM node"
+    },
+    {
+      "id": "closed_gate_blocks_traversal",
+      "kind": "route",
+      "source": 395033682,
+      "target": 3596340824,
+      "reachable": null,
+      "forbidden_internal_nodes": [395033686],
+      "evidence": "Way 281145793 directly connects both sides of gate node 395033686, tagged barrier=gate and access=no. A detour is allowed."
+    },
+    {
+      "id": "tankistov_sokolovaya_no_left_turn",
+      "kind": "route",
+      "source": 2124956636,
+      "target": 90414397,
+      "reachable": true,
+      "forbidden_turns": [{"from": 202529606, "via": 1165759201, "to": 62174662}],
+      "evidence": "OSM turn restriction relation 2718911 prohibits this transition from Tankistov to Sokolovaya"
+    },
+    {
+      "id": "astrakhanskaya_local_destination",
+      "kind": "route",
+      "source": 1780335603,
+      "target": 1722606027,
+      "required_ways": [160196363],
+      "reachable": true,
+      "evidence": "Target lies on an access=destination service cul-de-sac physically connected to Astrakhanskaya"
+    },
+    {
+      "id": "pugacheva_local_only_no_through_route",
+      "kind": "route",
+      "source": 11601659232,
+      "target": 1780330023,
+      "forbidden_ways": [381175268],
+      "reachable": true,
+      "policy_probe": true,
+      "evidence": "Both public endpoints lie beyond opposite access nodes of driveway 381175268; use the public street"
+    }
+  ]
+}

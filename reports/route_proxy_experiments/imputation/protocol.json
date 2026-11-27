@@ -1,0 +1,31 @@
+{
+  "cities": [
+    "cheboksary",
+    "izhevsk",
+    "kazan",
+    "kirov",
+    "naberezhnye_chelny",
+    "nizhny_novgorod",
+    "orenburg",
+    "penza",
+    "perm",
+    "samara",
+    "saratov",
+    "tolyatti",
+    "ufa",
+    "ulyanovsk"
+  ],
+  "targets": [
+    "saratov",
+    "samara",
+    "ulyanovsk"
+  ],
+  "seed": 42,
+  "iterations": 120,
+  "evaluation": "Entire city and overlapping way IDs excluded. Length-weighted error on known labels.",
+  "labels": "Recognized paved/unpaved or numeric coverage on at least 80% of a whole OSM way.",
+  "fallback": "Class, service subtype and direction with simpler class fallback if needed. Minimum 30 labeled ways and 2 cities.",
+  "learned": "CatBoost on OSM covariates. Predict lane count plus plausible width per lane; estimate is advisory.",
+  "metrics_only": false,
+  "limitations": "Known roads are selectively labeled. Scope is full buffered graph. SKDF transition surface excluded from labels."
+}
