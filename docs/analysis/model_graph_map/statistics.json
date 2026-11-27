@@ -1,0 +1,35 @@
+{
+  "merged": {
+    "nodes": 12010,
+    "edges": 15578,
+    "junctions": 7411,
+    "three_leg": 5347,
+    "four_plus": 2064,
+    "dead_ends": 2544,
+    "pseudo": 2055,
+    "boundary_nodes": 97,
+    "merged_clusters": 556,
+    "length_km": 2634.941,
+    "sources": {
+      "osm_street_graph_consolidated_nodes.parquet": "82686faf1ba1213c14360b6d495f5556c65c539d4d5b2f7d65cbc02db987726f",
+      "osm_street_graph_consolidated_edges.parquet": "6cefdd45e33fa8471a39c8bdcced0cfda454b1792c37dd936243d21446c5caa4"
+    }
+  },
+  "raw": {
+    "nodes": 12703,
+    "edges": 16311,
+    "junctions": 8102,
+    "three_leg": 6456,
+    "four_plus": 1646,
+    "dead_ends": 2544,
+    "pseudo": 2057,
+    "boundary_nodes": 97,
+    "merged_clusters": 0,
+    "length_km": 2627.913,
+    "sources": {
+      "osm_street_graph_nodes.parquet": "3909ad1119dca9ac47740903e397ce7b7418a9d20bdceb3e73d20e4fcd58ba1e",
+      "osm_street_graph_edges.parquet": "f8cd3b39c2ede850a33c214ebbb6f560eb6eb30e9166f0d6819315ddfc78c8c1"
+    }
+  },
+  "feature_junctions_stage2": 8102
+}

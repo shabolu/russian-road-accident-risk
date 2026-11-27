@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="ru"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Дорожный граф Саратова — сеть модели</title>
+<style>__LEAFLET_CSS__</style>
+<style>
+*{box-sizing:border-box}body{margin:0;font:14px/1.45 system-ui,-apple-system,sans-serif;color:#203047;background:#eef2f6}
+#map{position:absolute;inset:0 0 0 340px;background:#edf1f5}aside{width:340px;position:absolute;inset:0 auto 0 0;padding:23px 21px;overflow:auto;background:#fff;border-right:1px solid #dbe2eb;z-index:500}
+h1{font-size:23px;line-height:1.2;margin:5px 0 9px}h2{font-size:14px;margin:18px 0 9px}p{margin:8px 0}.muted,small{color:#64748b}.kicker{font-size:11px;letter-spacing:1.1px;text-transform:uppercase;color:#576a80}
+.stats{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:16px 0}.stat{padding:10px 12px;border:1px solid #e0e7ef;border-radius:8px}.stat b{display:block;font-size:22px;line-height:1.15}.stat span{font-size:12px;color:#64748b}
+button,select,input[type=search]{font:inherit;border:1px solid #cbd5e1;border-radius:6px;background:white;padding:8px;width:100%;color:inherit}button{cursor:pointer}button:hover{background:#edf4fa}.buttons{display:flex;gap:7px;margin:9px 0}.buttons button{width:auto;flex:1;font-size:12px}
+label{display:block;margin:8px 0;cursor:pointer}label input{vertical-align:middle;margin-right:7px}select{margin:5px 0}.dot{display:inline-block;width:10px;height:10px;border-radius:50%;margin-right:7px}.legend div{font-size:12px;margin:5px 0}.legend small{display:block;margin-top:8px}
+#details{border-top:1px solid #dbe2eb;margin-top:16px;padding-top:10px;overflow-wrap:anywhere}.details-row{display:flex;justify-content:space-between;gap:10px;margin:4px 0}.details-row span:first-child{color:#64748b}a{color:#1765a6}.result{display:block;text-align:left;border:0;border-bottom:1px solid #e5eaf0;border-radius:0;font-size:12px;padding:6px}.badge{display:inline-block;background:#e8eef8;border-radius:4px;padding:2px 6px;font-size:11px;margin:3px 0}
+#status{position:absolute;left:355px;bottom:12px;background:#ffffffee;border:1px solid #dbe2eb;border-radius:6px;padding:6px 10px;z-index:450;font-size:12px;pointer-events:none}details{font-size:12px;color:#64748b;margin:14px 0}summary{cursor:pointer}hr{border:0;border-top:1px solid #e5eaf0;margin:16px 0}
+.leaflet-control-layers-toggle{background-image:none!important;text-align:center}.leaflet-control-layers-toggle:after{content:'▱';font-size:29px;line-height:36px;color:#354b63}
+@media(max-width:760px){aside{width:285px;padding:16px}#map{left:285px}#status{left:296px;max-width:calc(100% - 305px)}h1{font-size:20px}}
+</style></head><body>
+<aside>
+<div class="kicker">Саратов · сеть из модели</div><h1>Дорожный граф</h1>
+<p class="muted">Перекрёстки, подходы и объединение близких узлов.</p>
+<select id="mode" aria-label="Состояние графа"><option value="merged">После склейки · этап 4</option><option value="raw">До склейки · истинная степень узлов</option></select>
+<div class="stats"><div class="stat"><b id="nodes-total">—</b><span>узлов графа</span></div><div class="stat"><b id="edges-total">—</b><span>рёбер</span></div><div class="stat"><b id="junctions-total">—</b><span>перекрёстков</span></div><div class="stat"><b id="merged-total">—</b><span>склеенных кластеров</span></div></div>
+<div class="buttons"><button id="city">Саратов</button><button id="center">Центр</button><button id="extent">Вся область</button></div>
+<input type="search" id="search" placeholder="Найти улицу…" aria-label="Поиск улицы"><div id="results"></div>
+<h2>Узлы на карте</h2>
+<label><input type="checkbox" id="nodes" checked>Показывать узлы графа</label>
+<label><input type="checkbox" id="mergedOnly">Только склеенные перекрёстки</label>
+<label><input type="checkbox" id="members">Исходные точки склейки</label>
+<label><input type="checkbox" id="pseudo">Стыки степени 2</label>
+<label><input type="checkbox" id="featureNodes">Точки признаков этапа 2</label>
+<div class="legend">
+<div><i class="dot" style="background:#008b8b"></i>3 подхода, включая Т-образные</div>
+<div><i class="dot" style="background:#3a62c4"></i>4 подхода и более</div>
+<div><i class="dot" style="background:#d28b20"></i>Тупик</div>
+<div><i class="dot" style="background:#8b96a8"></i>Стык или узел у края области</div>
+<div><i class="dot" style="background:#c54f9e"></i>Исходный узел / точка признака</div>
+<small>Чёрная обводка — объединено несколько исходных узлов. На малом масштабе мелкие точки скрыты; увеличьте карту.</small>
+</div>
+<div id="details"><h2>Выберите узел или ребро</h2><p class="muted">Щёлкните по графу, чтобы увидеть подходы и состав объединённого перекрёстка.</p></div>
+<details><summary>Какой граф здесь показан</summary>
+<p>Это сохранённые результаты модели: уличная сеть без дворовых проездов service. Склейка — 20 м с проверкой связи по улицам и отдельным правилом колец. Геометрия и идентификаторы не пересчитывались.</p>
+<p>На этапе 2 исправлен подсчёт подходов и вычислены признаки перекрёстков. На этапе 4 склеен граф для геометрических признаков. Дополнительный слой показывает исходные точки признаков; их количество отличается от количества склеенных перекрёстков.</p>
+<p>Область саратовского эксперимента включает часть Энгельса. Граничные узлы отмечены серым. Подложка требует интернета; граф встроен в этот файл.</p>
+</details>
+</aside><div id="map"></div><div id="status">Загрузка графа…</div>
+<script>__LEAFLET_JS__</script>
+<script>
+const DATA=__GRAPH_DATA__;
+const $=id=>document.getElementById(id),fmt=n=>n.toLocaleString('ru-RU'),esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const map=L.map('map',{preferCanvas:true,zoomControl:false}).setView([51.548,46.015],12);
+L.control.zoom({position:'topright'}).addTo(map);
+const osm=L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png',{maxZoom:19,attribution:'&copy; OpenStreetMap contributors'}).addTo(map);
+const blank=L.layerGroup();
+L.control.layers({'OpenStreetMap':osm,'Только граф':blank},{},{position:'topright',collapsed:true}).addTo(map);
+let current,selected=null,lastVisible=[],lastNodes=[],showNames=[],rawById=new Map(DATA.raw.nodes.map(n=>[n[0],n]));
+const colors={motorway:'#c45132',trunk:'#c45132',primary:'#cc7243',secondary:'#b18a44',tertiary:'#657f9d',unclassified:'#7290a4',residential:'#7290a4',living_street:'#8b9aa9'};
+for(const name of ['merged','raw']){
+ const g=DATA[name];g.nodeById=new Map(g.nodes.map(n=>[n[0],n]));g.incident=new Map();
+ for(const e of g.edges){for(const id of [e[1],e[2]]){if(!g.incident.has(id))g.incident.set(id,[]);g.incident.get(id).push(e)}
+ const c=e[8];e.bounds=[Math.min(...c.map(p=>p[0])),Math.min(...c.map(p=>p[1])),Math.max(...c.map(p=>p[0])),Math.max(...c.map(p=>p[1]))];}
+}
+const GraphLayer=L.Layer.extend({
+ onAdd(m){this._map=m;this.canvas=L.DomUtil.create('canvas','leaflet-zoom-hide');this.canvas.style.pointerEvents='none';m.getPanes().overlayPane.appendChild(this.canvas);m.on('moveend resize',this.draw,this);this.draw()},
+ onRemove(m){m.off('moveend resize',this.draw,this);this.canvas.remove()},
+ draw(){if(!current)return;const m=this._map,size=m.getSize(),dpr=window.devicePixelRatio||1,c=this.canvas;c.width=size.x*dpr;c.height=size.y*dpr;c.style.width=size.x+'px';c.style.height=size.y+'px';L.DomUtil.setPosition(c,m.containerPointToLayerPoint([0,0]));
+ const ctx=c.getContext('2d');ctx.scale(dpr,dpr);ctx.lineCap='round';ctx.lineJoin='round';lastVisible=[];lastNodes=[];
+ const b=m.getBounds().pad(.05),z=m.getZoom(),highlight=new Set();
+ if(selected?.type==='node')for(const e of current.incident.get(selected.id)||[])highlight.add(e[0]);
+ if(selected?.type==='edge')highlight.add(selected.id);
+ function path(coords,color,width,alpha){ctx.beginPath();coords.forEach((p,i)=>{const q=m.latLngToContainerPoint(p);i?ctx.lineTo(q.x,q.y):ctx.moveTo(q.x,q.y)});ctx.strokeStyle=color;ctx.lineWidth=width;ctx.globalAlpha=alpha;ctx.stroke();ctx.globalAlpha=1}
+ for(const e of current.edges){const q=e.bounds;if(q[2]<b.getSouth()||q[0]>b.getNorth()||q[3]<b.getWest()||q[1]>b.getEast())continue;lastVisible.push(e);const cls=e[4].replace('_link','');path(e[8],colors[cls]||'#7290a4',z<13?1.1:cls==='trunk'||cls==='primary'?2.7:1.8,.85)}
+ for(const e of lastVisible)if(highlight.has(e[0]))path(e[8],'#ed485b',5,1);
+ function point(n,color,r,stroke){const q=m.latLngToContainerPoint([n[1],n[2]]);ctx.beginPath();ctx.arc(q.x,q.y,r,0,Math.PI*2);ctx.fillStyle=color;ctx.fill();if(stroke){ctx.strokeStyle=stroke;ctx.lineWidth=1.5;ctx.stroke()}}
+ if($('nodes').checked){for(const n of current.nodes){if(!b.contains([n[1],n[2]]))continue;const isMerged=n[5].length>1,chosen=selected?.type==='node'&&selected.id===n[0];if($('mergedOnly').checked&&!isMerged&&!chosen)continue;if(n[3]===2&&!$('pseudo').checked&&!chosen)continue;if(z<13&&!isMerged&&!chosen)continue;
+ const color=n[4]?'#8b96a8':n[3]>=4?'#3a62c4':n[3]===3?'#008b8b':n[3]===1?'#d28b20':'#8b96a8';point(n,color,chosen?8:isMerged?5:z>=16?4:3,isMerged?'#17263a':chosen?'#ed485b':null);lastNodes.push(n)}}
+ if($('members').checked&&$('mode').value==='merged'){for(const n of current.nodes){if(n[5].length<=1||!b.contains([n[1],n[2]]))continue;for(const id of n[5]){const r=rawById.get(id);if(r){path([[n[1],n[2]],[r[1],r[2]]],'#c54f9e',1,.7);point(r,'#c54f9e',z>=15?3.5:2,null)}}}}
+ if($('featureNodes').checked&&z>=13){for(const f of DATA.feature_nodes)if(b.contains([f[1],f[2]])){const q=m.latLngToContainerPoint([f[1],f[2]]);ctx.beginPath();ctx.arc(q.x,q.y,5.5,0,Math.PI*2);ctx.strokeStyle='#c54f9e';ctx.lineWidth=1.5;ctx.stroke()}}
+ if(selected?.type==='node'){const n=current.nodeById.get(selected.id);if(n){point(n,'#ed485b',7,'#fff');if(z>=15){for(const e of current.incident.get(n[0])||[]){const other=current.nodeById.get(e[1]===n[0]?e[2]:e[1]);if(other)point(other,'#ed485b',4,'#fff')}}}}
+ $('status').textContent=`В окне: ${fmt(lastVisible.length)} рёбер, ${fmt(lastNodes.length)} узлов${z<13?' · увеличьте карту для всех точек':''}`;
+ window.GRAPH_STATE={mode:$('mode').value,visibleEdges:lastVisible.length,visibleNodes:lastNodes.length,selected};
+ }
+});
+const layer=new GraphLayer();
+function reset(){selected=null;$('details').innerHTML='<h2>Выберите узел или ребро</h2><p class="muted">Щёлкните по графу, чтобы увидеть подходы и состав склейки.</p>'}
+function changeMode(){current=DATA[$('mode').value];reset();const s=current.stats;$('nodes-total').textContent=fmt(s.nodes);$('edges-total').textContent=fmt(s.edges);$('junctions-total').textContent=fmt(s.junctions);$('merged-total').textContent=fmt(s.merged_clusters);const raw=$('mode').value!=='merged';$('members').disabled=raw;$('mergedOnly').disabled=raw;if(raw){$('mergedOnly').checked=false;$('members').checked=false}layer._map&&layer.draw();$('results').innerHTML=''}
+changeMode();layer.addTo(map);
+function row(name,value){return `<div class="details-row"><span>${esc(name)}</span><span>${esc(value)}</span></div>`}
+function chooseNode(n){selected={type:'node',id:n[0]};const edges=current.incident.get(n[0])||[],names=[...new Set(edges.map(e=>e[5]).filter(Boolean))];
+ $('details').innerHTML='<h2>'+esc(n[5].length>1?'Объединённый перекрёсток':n[3]>=3?'Перекрёсток':n[3]===1?'Тупик':'Стык улиц')+'</h2>'+row('Подходов',n[3])+row('Исходных узлов',n[5].length)+(n[5].length>1?row('Радиус кластера',n[6].toFixed(1)+' м'):'')+row('Координаты',n[1].toFixed(6)+', '+n[2].toFixed(6))+(n[4]?'<p class="badge">У края области выгрузки</p>':'')+'<p>'+esc(names.join(' · ')||'Без названий')+'</p><small>Узел графа: '+esc(n[0])+'</small><p><small>Исходные OSM-узлы: '+n[5].map(id=>'<a target="_blank" rel="noopener" href="https://www.openstreetmap.org/node/'+encodeURIComponent(id)+'">'+esc(id)+'</a>').join(', ')+'</small></p>';layer.draw()}
+function chooseEdge(e){selected={type:'edge',id:e[0]};$('details').innerHTML='<h2>'+esc(e[5]||'Улица без названия')+'</h2>'+row('Ребро графа',e[0])+row('Класс OSM',e[4])+row('Длина',e[6].toFixed(1)+' м')+row('Движение',e[7]===0?'Двустороннее':e[7]===1?'u → v':'v → u')+row('Начало u',e[1])+row('Конец v',e[2])+'<p><a target="_blank" rel="noopener" href="https://www.openstreetmap.org/way/'+encodeURIComponent(e[3])+'">Открыть исходную дорогу в OSM</a></p>';layer.draw()}
+function segmentDist(p,a,b){let dx=b.x-a.x,dy=b.y-a.y,t=dx*dx+dy*dy;t=t?Math.max(0,Math.min(1,((p.x-a.x)*dx+(p.y-a.y)*dy)/t)):0;return Math.hypot(p.x-a.x-t*dx,p.y-a.y-t*dy)}
+map.on('click',ev=>{const p=ev.containerPoint;let best=null,dist=11;for(const n of lastNodes){const q=map.latLngToContainerPoint([n[1],n[2]]),d=p.distanceTo(q);if(d<dist){dist=d;best=n}}if(best){chooseNode(best);return}let hit=null;dist=7;for(const e of lastVisible){const c=e[8];for(let i=1;i<c.length;i++){const d=segmentDist(p,map.latLngToContainerPoint(c[i-1]),map.latLngToContainerPoint(c[i]));if(d<dist){dist=d;hit=e}}}if(hit)chooseEdge(hit);else{reset();layer.draw()}});
+$('mode').addEventListener('change',changeMode);for(const id of ['nodes','mergedOnly','members','pseudo','featureNodes'])$(id).addEventListener('change',()=>layer.draw());
+$('city').onclick=()=>map.setView([51.548,46.015],12);$('center').onclick=()=>map.setView([51.5355,46.0255],15);$('extent').onclick=()=>map.fitBounds(DATA.bbox,{padding:[24,24]});
+let timer;$('search').addEventListener('input',()=>{clearTimeout(timer);timer=setTimeout(()=>{const q=$('search').value.trim().toLocaleLowerCase('ru');$('results').innerHTML='';if(q.length<2)return;const names=[...new Set(current.edges.filter(e=>e[5].toLocaleLowerCase('ru').includes(q)).map(e=>e[5]))].slice(0,8);for(const name of names){const button=document.createElement('button');button.className='result';button.textContent=name;button.onclick=()=>{const es=current.edges.filter(e=>e[5]===name),points=es.flatMap(e=>e[8]);map.fitBounds(points,{padding:[30,30],maxZoom:17});chooseEdge(es[0]);$('results').innerHTML=''};$('results').appendChild(button)}},180)});
+window.SARATOV_MAP={map,chooseNode,chooseEdge,current:()=>current,layer};
+</script></body></html>

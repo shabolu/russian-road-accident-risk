@@ -1,0 +1,108 @@
+{
+  "js_errors": [],
+  "failed_requests": [
+    {
+      "url": "https://tile.openstreetmap.org/15/20576/10900.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20577/10900.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20576/10899.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20577/10899.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20576/10901.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20577/10901.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20578/10900.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20575/10899.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20578/10899.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20578/10901.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20576/10898.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20577/10898.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20577/10902.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20575/10898.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20578/10898.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20579/10900.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20578/10902.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20579/10899.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20579/10901.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20579/10898.png",
+      "failure": "net::ERR_ABORTED"
+    },
+    {
+      "url": "https://tile.openstreetmap.org/15/20579/10902.png",
+      "failure": "net::ERR_ABORTED"
+    }
+  ],
+  "tile_http_statuses": [
+    200
+  ],
+  "real_map_click": {
+    "id": "-10944283641",
+    "x": 1215,
+    "y": 525
+  },
+  "checks": [
+    "initial model counts",
+    "centre viewport",
+    "node click and incident edges",
+    "members",
+    "merged-only filter",
+    "raw mode after filter",
+    "street search and edge selection",
+    "stage-2 feature overlay",
+    "background-free mode"
+  ]
+}
